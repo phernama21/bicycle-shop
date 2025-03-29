@@ -1,59 +1,33 @@
-# docker-compose.yml
-version: '3.8'
+version: '3.7'
 
 services:
-  api:
-    build: ./api-backend
+  backend:
+    build:
+      context: ./api-backend
     ports:
       - "3000:3000"
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgres://postgres:password@db:5432/bicycle_shop
-      - RAILS_ENV=development
     volumes:
-      - ./api-backend:/app
-      - api_gems:/usr/local/bundle
-    command: bash -c "if [ ! -f ./bin/rails ]; then rails new . --api --database=postgresql --skip-test;fi && rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
+      - ./api-backend:/api-backend
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: bicyle-shop
 
-  frontoffice:
-    build: ./frontoffice
+  frontend:
+    build:
+      context: ./frontend
     ports:
-      - "3001:3001"
-    volumes:
-      - ./frontoffice:/app
-      - frontoffice_node_modules:/app/node_modules
+      - "3001:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:3000/api
+      NEXT_PUBLIC_API_URL: "http://backend:3000/api"
     depends_on:
-      - api
-    command: sh -c "npm install && rm -rf .next && npm run dev -- -p 3001"
+      - backend
 
-  backoffice:
-    build: ./backoffice
-    ports:
-      - "3002:3002"
-    volumes:
-      - ./backoffice:/app
-      - backoffice_node_modules:/app/node_modules
+  mysql:
+    image: mysql:8
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:3000/api
-    depends_on:
-      - api
-    command: sh -c "npm install && rm -rf .next && npm run dev -- -p 3002"
-
-  db:
-    image: postgres:15
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=bicycle_shop
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bicycle-shop
     ports:
-      - "5432:5432"
-
-volumes:
-  postgres_data:
-  api_gems:
-  frontoffice_node_modules:
-  backoffice_node_modules:
+      - "3306:3306"
