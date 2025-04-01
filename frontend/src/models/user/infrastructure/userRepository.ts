@@ -1,9 +1,6 @@
-// models/user/infrastructure/userRepository.ts
-
 import apiClient from "@/lib/api";
 import { AuthResponse, User, UserLogin, UserRegistration } from "../domain/user";
 import { single, singleWithToken } from "../adapter/userAdapter";
-import axios from "axios";
 
 export const userRepository = {
 

@@ -32,7 +32,6 @@ export default function RegisterPage() {
     try {
       await register(formData);
     } catch (err: any) {
-      // The error should already be set in context
       console.error('Registration error:', err);
     }
   };

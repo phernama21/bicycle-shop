@@ -9,7 +9,6 @@ const apiClient = axios.create({
   },
 });
 
-// Add request interceptor to include auth tokens from localStorage
 apiClient.interceptors.request.use(
   (config) => {
     const authHeaders = getAuthHeaders();
@@ -24,7 +23,6 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Add response interceptor to update tokens after each request
 apiClient.interceptors.response.use(
   (response) => {
     const authHeaders = [

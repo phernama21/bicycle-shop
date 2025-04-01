@@ -20,4 +20,10 @@ class Users::TokenAuthRegistrationsController < DeviseTokenAuth::RegistrationsCo
         devise_parameter_sanitizer.permit :sign_up, keys: added_attributes
         devise_parameter_sanitizer.permit :account_update, keys: added_attributes
     end
+
+    def render_create_success
+        render json: {
+            user: resource_data(resource_json: @resource.front_data)
+        }
+    end
 end
