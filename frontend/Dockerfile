@@ -2,8 +2,7 @@ FROM node:18
 
 # Set up working directory
 WORKDIR /frontend
-COPY . .
-
+COPY package.json package-lock.json ./
 # Install dependencies
 RUN npm install
 
@@ -11,4 +10,4 @@ RUN npm install
 EXPOSE 3001
 
 # Start the Next.js app
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0"]

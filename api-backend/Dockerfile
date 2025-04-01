@@ -5,8 +5,7 @@ RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
 
 # Set up working directory
 WORKDIR /api-backend
-COPY . .
-
+COPY Gemfile Gemfile.lock ./
 # Install gems
 RUN gem install bundler
 RUN bundle install
