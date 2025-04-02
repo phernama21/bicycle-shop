@@ -2,7 +2,6 @@ import { UserProvider } from '@/contexts/UserContext';
 import './globals.css';
 import type { Metadata } from 'next';
 import { NavigationProvider } from '@/contexts/NavigationContext';
-
 export const metadata: Metadata = {
   title: 'Your Application',
   description: 'Your application description',
@@ -18,7 +17,7 @@ export default function RootLayout({
       <body className="h-full">
         <UserProvider>
           <NavigationProvider>
-            {children}
+              {children}
           </NavigationProvider>
         </UserProvider>
       </body>
