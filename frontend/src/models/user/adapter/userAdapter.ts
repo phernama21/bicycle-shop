@@ -6,6 +6,7 @@ export const single = (userData: any): User => {
     email: userData.email,
     firstName: userData.first_name || '',
     lastName: userData.last_name || '',
+    isAdmin: userData.is_admin || false,
     createdAt: new Date(userData.created_at),
     updatedAt: new Date(userData.updated_at),
   };

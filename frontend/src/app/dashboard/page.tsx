@@ -1,5 +1,6 @@
 'use client';
 
+import { AdminToggle } from '@/components/navigation/adminToggle';
 import { useUser } from '@/contexts/UserContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -28,15 +29,7 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
           <div className="flex items-center">
-            <span className="mr-4">
-              Welcome, {user.firstName} {user.lastName}
-            </span>
-            <button
-              onClick={() => logout()}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Sign out
-            </button>
+            <AdminToggle/>
           </div>
         </div>
       </header>

@@ -3,6 +3,7 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
+  isAdmin: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

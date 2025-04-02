@@ -47,7 +47,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await userRepository.login(credentials);
       setUser(response.user);
-      router.push('/dashboard');
+      if (response.user.isAdmin) {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (err: any) {
       setError(err.response?.data?.errors?.[0] || 'Login failed');
       throw err;
