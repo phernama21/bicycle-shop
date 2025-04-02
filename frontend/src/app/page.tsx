@@ -22,8 +22,8 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
       <div className="max-w-md w-full text-center space-y-8 p-10">
-        <h1 className="text-4xl font-bold text-gray-900">Welcome to Your App</h1>
-        <p className="text-gray-600">Your app description goes here.</p>
+        <h1 className="text-4xl font-bold text-gray-900">Welcome to Marcu's Shop</h1>
+        <p className="text-gray-600">Customize your dream bicycle</p>
         
         <div className="mt-8 space-y-4">
           <Link 

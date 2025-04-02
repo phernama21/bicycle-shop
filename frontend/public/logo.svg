@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+  <!-- Bicycle frame and parts in indigo-600 (#4f46e5) -->
+  <!-- Main frame -->
+  <line x1="50" y1="80" x2="80" y2="40" stroke="#4f46e5" stroke-width="5" stroke-linecap="round"/>
+  <line x1="80" y1="40" x2="105" y2="60" stroke="#4f46e5" stroke-width="5" stroke-linecap="round"/>
+  <line x1="105" y1="60" x2="150" y2="60" stroke="#4f46e5" stroke-width="5" stroke-linecap="round"/>
+  <line x1="50" y1="80" x2="105" y2="80" stroke="#4f46e5" stroke-width="5" stroke-linecap="round"/>
+  <line x1="105" y1="60" x2="105" y2="80" stroke="#4f46e5" stroke-width="5" stroke-linecap="round"/>
+  
+  <!-- Wheels -->
+  <circle cx="50" cy="80" r="30" stroke="#4f46e5" stroke-width="5" fill="transparent"/>
+  <circle cx="150" cy="80" r="30" stroke="#4f46e5" stroke-width="5" fill="transparent"/>
+  
+  <!-- Handlebars -->
+  <line x1="150" y1="60" x2="160" y2="45" stroke="#4f46e5" stroke-width="5" stroke-linecap="round"/>
+  
+  <!-- Pedals and chain -->
+  <circle cx="105" cy="80" r="8" stroke="#4f46e5" stroke-width="4" fill="transparent"/>
+  <line x1="105" y1="72" x2="105" y2="88" stroke="#4f46e5" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Minimalistic seat -->
+  <line x1="80" y1="40" x2="70" y2="40" stroke="#4f46e5" stroke-width="5" stroke-linecap="round"/>
+</svg>
