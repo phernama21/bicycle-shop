@@ -10,17 +10,21 @@ interface NavigationContextType {
   viewMode: ViewMode;
   toggleViewMode: () => void;
   navigateToDashboard: () => void;
+  isNavigating: boolean;
 }
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 
 export const NavigationProvider = ({ children }: { children: ReactNode }) => {
-  const { user, isAuthenticated } = useUser();
+  const { user, isAuthenticated, loading: userLoading } = useUser();
   const [viewMode, setViewMode] = useState<ViewMode>('normal');
+  const [isNavigating, setIsNavigating] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
+  // Set the view mode based on user role
   useEffect(() => {
+    console.log("USER", user)
     if (user?.isAdmin) {
       setViewMode('admin');
     } else {
@@ -28,22 +32,49 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user]);
 
+  // Handle navigation for authenticated users on public pages
   useEffect(() => {
-    if (isAuthenticated && pathname === '/dashboard' || pathname === '/admin/dashboard') {
-      navigateToDashboard();
+    // Only run this if user loading is complete and we're not already navigating
+    if (!userLoading && isAuthenticated && !isNavigating) {
+      const isPublicRoute = ['/', '/login', '/register'].includes(pathname || '');
+      
+      if (isPublicRoute) {
+        setIsNavigating(true);
+        console.log("USER JUST BEFORE REDIRECT", user)
+        if (user?.isAdmin) {
+          router.push('/admin/dashboard');
+        } else {
+          router.push('/dashboard');
+        }
+        setTimeout(() => setIsNavigating(false), 500);
+      }
     }
-  }, [viewMode, isAuthenticated]);
+  }, [userLoading, isAuthenticated, pathname, viewMode]);
 
   const toggleViewMode = () => {
-    setViewMode(viewMode === 'admin' ? 'normal' : 'admin');
+    const newMode = viewMode === 'admin' ? 'normal' : 'admin';
+    setViewMode(newMode);
+    
+    // Only navigate if authenticated
+    if (isAuthenticated) {
+      setIsNavigating(true);
+      if (newMode === 'admin') {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
+      setTimeout(() => setIsNavigating(false), 500);
+    }
   };
 
   const navigateToDashboard = () => {
+    console.log("viwemode", viewMode)
     if (viewMode === 'admin') {
       router.push('/admin/dashboard');
     } else {
       router.push('/dashboard');
     }
+    setTimeout(() => setIsNavigating(false), 500);
   };
 
   return (
@@ -52,6 +83,7 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
         viewMode,
         toggleViewMode,
         navigateToDashboard,
+        isNavigating
       }}
     >
       {children}

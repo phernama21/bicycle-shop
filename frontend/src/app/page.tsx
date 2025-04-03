@@ -1,22 +1,21 @@
 'use client';
 
 import { useUser } from '@/contexts/UserContext';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useNavigation } from '@/contexts/NavigationContext';
 import Link from 'next/link';
 
 export default function HomePage() {
   const { isAuthenticated, loading } = useUser();
-  const router = useRouter();
+  const { isNavigating } = useNavigation();
 
-  useEffect(() => {
-    if (!loading && isAuthenticated) {
-      router.push('/dashboard');
-    }
-  }, [isAuthenticated, loading, router]);
-
-  if (loading) {
+  // Show loading while either user context is loading or we're navigating
+  if (loading || (isAuthenticated && isNavigating)) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  // Only show the home page content if the user is not authenticated
+  if (isAuthenticated) {
+    return <div className="flex items-center justify-center min-h-screen">Redirecting...</div>;
   }
 
   return (

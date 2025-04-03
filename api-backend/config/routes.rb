@@ -5,6 +5,9 @@ Rails.application.routes.draw do
       registrations: "users/token_auth_registrations"
       #TODO Add confirmations and reset password (future implementations)
     }
+
+    #USERS
+    get "auth/me" => "users#load_me"
   end
   
   

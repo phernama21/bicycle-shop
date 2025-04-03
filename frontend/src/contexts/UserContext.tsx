@@ -1,10 +1,10 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
 import { User, UserLogin, UserRegistration } from '@/models/user/domain/user';
 import { userRepository } from '@/models/user/infrastructure/userRepository';
 import { clearAuthHeaders } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 
 interface UserContextType {
   user: User | null;
@@ -47,11 +47,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await userRepository.login(credentials);
       setUser(response.user);
-      if (response.user.isAdmin) {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
+      // Navigation will be handled by NavigationContext
     } catch (err: any) {
       setError(err.response?.data?.errors?.[0] || 'Login failed');
       throw err;
@@ -67,7 +63,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await userRepository.register(userData);
       setUser(response.user);
-      router.push('/dashboard');
+      // Navigation will be handled by NavigationContext
     } catch (err: any) {
       setError(err.response?.data?.errors?.[0] || 'Registration failed');
       throw err;
@@ -83,7 +79,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       await userRepository.logout();
       setUser(null);
       clearAuthHeaders();
-      router.push('/login');
+      router.push('/');
     } catch (err) {
       console.error('Logout error:', err);
     } finally {

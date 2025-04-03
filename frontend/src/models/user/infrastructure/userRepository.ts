@@ -47,8 +47,8 @@ export const userRepository = {
   
   async getCurrentUser(): Promise<User | null> {
     try {
-      const response = await apiClient.get('/auth/validate_token');
-      return single(response.data.data);
+      const response = await apiClient.get('/auth/me');
+      return single(response.data.user);
     } catch (error) {
       console.error('Get current user error:', error);
       return null;
