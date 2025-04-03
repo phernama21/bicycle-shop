@@ -1,6 +1,6 @@
 import apiClient from "@/lib/api";
 import { AuthResponse, User, UserLogin, UserRegistration } from "../domain/user";
-import { single, singleWithToken } from "../adapter/userAdapter";
+import { multiple, single, singleWithToken } from "../adapter/userAdapter";
 
 export const userRepository = {
 
@@ -52,6 +52,26 @@ export const userRepository = {
     } catch (error) {
       console.error('Get current user error:', error);
       return null;
+    }
+  },
+
+  async getAllUsers (): Promise<User[]> {
+    try {
+      const response = await apiClient.get('/users');
+      return multiple(response.data.users)
+    } catch (error) {
+      console.error('Get all users error:', error);
+      return [];
+    }
+  },
+  
+  async updateUserAdminStatus (userId: string, isAdmin: boolean): Promise<boolean> {
+    try {
+      const response = await apiClient.put(`/users/${userId}`, {is_admin: isAdmin });
+      return response.status==200;
+    } catch (error) {
+      console.error('Update user admin status error:', error);
+      return false;
     }
   }
 };

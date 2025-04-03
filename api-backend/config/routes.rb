@@ -8,6 +8,8 @@ Rails.application.routes.draw do
 
     #USERS
     get "auth/me" => "users#load_me"
+    get "users" => "users#load"
+    put "users/:id" => "users#change_admin_status"
   end
   
   

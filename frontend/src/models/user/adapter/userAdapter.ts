@@ -12,6 +12,21 @@ export const single = (userData: any): User => {
   };
 };
 
+export const multiple = (userData: any): User[] => {
+  if(Array.isArray(userData)){
+    const users = userData.map((user) => {
+      if(user?.id === undefined){
+        throw new Error('User has no id.')
+      }else{
+        return single(user);
+      }
+    })
+    return users
+  }else{
+    return []
+  }
+}
+
 export const singleWithToken = (response: any): AuthResponse => {
   return {
     user: single(response.data.user),

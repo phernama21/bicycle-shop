@@ -24,8 +24,7 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="bg-gray-50 py-5">
-      <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+    
        
         <div className="mt-10 grid gap-4 lg:grid-cols-3 lg:grid-rows-2">
           {/* Users Management Card - Spans 2 rows */}
@@ -183,7 +182,5 @@ export default function AdminDashboardPage() {
             <div className="absolute inset-0 rounded-lg bg-indigo-500/5 opacity-0 transition-opacity group-hover:opacity-100"></div>
           </Link>
         </div>
-      </div>
-    </div>
   );
 }

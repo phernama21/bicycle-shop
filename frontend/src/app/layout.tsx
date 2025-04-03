@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full bg-white vsc-initialized">
+    <html lang="en" className="h-full bg-white">
       <body className="h-full">
         <UserProvider>
           <NavigationProvider>
