@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full bg-white">
-      <body className="h-full">
+      <body className="h-full vsc-initialized">
         <UserProvider>
           <NavigationProvider>
               {children}

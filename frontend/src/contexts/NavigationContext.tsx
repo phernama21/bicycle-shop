@@ -22,9 +22,7 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Set the view mode based on user role
   useEffect(() => {
-    console.log("USER", user)
     if (user?.isAdmin) {
       setViewMode('admin');
     } else {
@@ -32,15 +30,12 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user]);
 
-  // Handle navigation for authenticated users on public pages
   useEffect(() => {
-    // Only run this if user loading is complete and we're not already navigating
     if (!userLoading && isAuthenticated && !isNavigating) {
       const isPublicRoute = ['/', '/login', '/register'].includes(pathname || '');
       
       if (isPublicRoute) {
         setIsNavigating(true);
-        console.log("USER JUST BEFORE REDIRECT", user)
         if (user?.isAdmin) {
           router.push('/admin/dashboard');
         } else {
@@ -55,7 +50,6 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
     const newMode = viewMode === 'admin' ? 'normal' : 'admin';
     setViewMode(newMode);
     
-    // Only navigate if authenticated
     if (isAuthenticated) {
       setIsNavigating(true);
       if (newMode === 'admin') {

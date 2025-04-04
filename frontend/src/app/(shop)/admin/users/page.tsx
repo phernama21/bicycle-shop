@@ -56,7 +56,7 @@ export default function UsersListPage() {
     setCurrentPage(1); 
   }, [searchTerm, users]);
 
-  const handleToggleAdmin = async (userId: string, newStatus: boolean) => {
+  const handleToggleAdmin = async (userId: number, newStatus: boolean) => {
     if (currentUser && userId === currentUser.id) {
       return;
     }

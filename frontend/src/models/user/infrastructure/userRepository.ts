@@ -65,7 +65,7 @@ export const userRepository = {
     }
   },
   
-  async updateUserAdminStatus (userId: string, isAdmin: boolean): Promise<boolean> {
+  async updateUserAdminStatus (userId: number, isAdmin: boolean): Promise<boolean> {
     try {
       const response = await apiClient.put(`/users/${userId}`, {is_admin: isAdmin });
       return response.status==200;
