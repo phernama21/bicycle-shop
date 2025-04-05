@@ -106,7 +106,7 @@ export default function AdminDashboardPage() {
                 </p>
               </div>
               <div className="flex flex-1 items-center justify-center max-lg:py-6 lg:pb-2">
-                <div className="bg-gray-100 rounded-lg p-3 w-4/5">
+                <div className="bg-gray-100 rounded-lg p-6 w-4/5">
                   <div className="flex items-center mb-2">
                     <div className="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
                     <span className="text-xs text-gray-700">REQUIRE Rule</span>
