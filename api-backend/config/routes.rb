@@ -14,6 +14,15 @@ Rails.application.routes.draw do
     #PRODUCTS
     get "products/base" => "products#load_base_product"
     put "products" => "products#update"
+
+    #RULES
+    get "rules" => "rules#load"
+    post "rules" => "rules#create"
+    put "rules/:id" => "rules#update"
+    delete "rules/:id" => "rules#delete"
+
+    #COMPONENTS
+     get "components" => "components#load"
   end
   
   

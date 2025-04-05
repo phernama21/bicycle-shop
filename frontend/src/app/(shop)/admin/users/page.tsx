@@ -114,7 +114,7 @@ export default function UsersListPage() {
               <path d="M15 18l-6-6 6-6" />
             </svg>
           </button>
-          <h1 className="text-2xl font-bold">Users</h1>
+          <h1 className="text-2xl font-bold text-indigo-600">Users</h1>
         </div>
         
         <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />

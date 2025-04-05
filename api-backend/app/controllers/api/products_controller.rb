@@ -1,4 +1,5 @@
 class Api::ProductsController < ApiController
+    before_action :authenticate_api_user!
     before_action :set_product, only: [:load_base_product]
 
     def load_base_product
@@ -12,6 +13,7 @@ class Api::ProductsController < ApiController
         render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
       end
     end
+    
     private
 
     def set_product

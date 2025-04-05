@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_04_071319) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_05_112555) do
   create_table "components", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -38,6 +38,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_04_071319) do
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "rules", force: :cascade do |t|
+    t.integer "component_condition_id", null: false
+    t.integer "option_condition_id", null: false
+    t.integer "component_effect_id", null: false
+    t.integer "option_effect_id", null: false
+    t.integer "effect_type", null: false
+    t.decimal "price_adjustment", precision: 10, scale: 2, default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["component_condition_id"], name: "index_rules_on_component_condition_id"
+    t.index ["component_effect_id"], name: "index_rules_on_component_effect_id"
+    t.index ["option_condition_id"], name: "index_rules_on_option_condition_id"
+    t.index ["option_effect_id"], name: "index_rules_on_option_effect_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -70,4 +85,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_04_071319) do
 
   add_foreign_key "components", "products"
   add_foreign_key "options", "components"
+  add_foreign_key "rules", "components", column: "component_condition_id"
+  add_foreign_key "rules", "components", column: "component_effect_id"
+  add_foreign_key "rules", "options", column: "option_condition_id"
+  add_foreign_key "rules", "options", column: "option_effect_id"
 end

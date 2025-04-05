@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Product, Component, Option } from '@/models/product/domain/product';
+import { Product} from '@/models/product/domain/product';
 import { productRepository } from '@/models/product/infrastructure/productRepository';
 import { useRouter } from "next/navigation";
 import ComponentCard from '@/components/products/componentCard';
 import { useAlert } from '@/contexts/AlertContext';
+import { Component } from '@/models/component/domain/component';
+import { Option } from '@/models/option/domain/option';
 
 const ProductDetails = () => {
   const [product, setProduct] = useState<Product | null>(null);

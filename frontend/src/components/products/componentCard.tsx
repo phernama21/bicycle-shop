@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Component, Option } from '@/models/product/domain/product';
 import OptionCard from './optionCard';
+import { Component } from '@/models/component/domain/component';
+import { Option } from '@/models/option/domain/option';
 
 interface ComponentCardProps {
   component: Component;

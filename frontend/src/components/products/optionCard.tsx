@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Option } from '@/models/product/domain/product';
-
+import { Option } from '@/models/option/domain/option';
 interface OptionCardProps {
   option: Option;
   componentIndex: number;

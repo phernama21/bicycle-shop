@@ -1,4 +1,5 @@
-import { Component, Product, Option } from "../domain/product";
+import { singleComponent } from "@/models/component/adapter/componentAdapter";
+import { Product } from "../domain/product";
 
 export const singleProduct = (productData: any): Product => {
   return {
@@ -10,19 +11,6 @@ export const singleProduct = (productData: any): Product => {
     })
   };
 };
-
-export const singleComponent = (componentData: any): Component => {
-    return {
-        id: componentData.id,
-        name: componentData.name,
-        description: componentData.description,
-        required: componentData.required,
-        options: componentData.options.map((option:any) => {
-            return singleOption(option)
-        })
-
-    }
-}
 
 export const updateProduct = (productData: Product): any => {
     return {
@@ -44,15 +32,5 @@ export const updateProduct = (productData: Product): any => {
                     _destroy: option._destroy || false,
                 })),
             })),
-    }
-}
-
-export const singleOption = (optionData: any): Option => {
-    return {
-        id: optionData.id,
-        name: optionData.name,
-        description: optionData.description,
-        basePrice: optionData.base_price,
-        inStock: optionData.in_stock,
     }
 }

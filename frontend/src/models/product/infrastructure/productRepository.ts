@@ -10,7 +10,7 @@ export const productRepository = {
     },
     
     async updateProduct(product: Product): Promise<Product> {
-        const response = await apiClient.put(`/products`, { product: updateProduct(product) });
+        const response = await apiClient.put(`/products`, { product: updateProduct(product) }); //this updateProduct is from the adapter
         return response.data;
     },
 
