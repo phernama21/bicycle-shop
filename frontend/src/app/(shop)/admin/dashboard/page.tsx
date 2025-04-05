@@ -102,22 +102,22 @@ export default function AdminDashboardPage() {
               <div className="px-8 pt-5 sm:px-10">
                 <p className="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">Rules</p>
                 <p className="mt-2 max-w-lg text-sm text-gray-600 max-lg:text-center">
-                  Configure rules between components.
+                  Configure rules between components and options.
                 </p>
               </div>
               <div className="flex flex-1 items-center justify-center max-lg:py-6 lg:pb-2">
                 <div className="bg-gray-100 rounded-lg p-3 w-4/5">
                   <div className="flex items-center mb-2">
                     <div className="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
-                    <span className="text-xs text-gray-700">Approval Required</span>
+                    <span className="text-xs text-gray-700">REQUIRE Rule</span>
                   </div>
                   <div className="flex items-center mb-2">
-                    <div className="w-4 h-4 rounded-full bg-yellow-500 mr-2"></div>
-                    <span className="text-xs text-gray-700">Notification Rules</span>
+                    <div className="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
+                    <span className="text-xs text-gray-700">EXCLUDE Rule</span>
                   </div>
                   <div className="flex items-center">
                     <div className="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
-                    <span className="text-xs text-gray-700">Security Policies</span>
+                    <span className="text-xs text-gray-700">PRICE rule</span>
                   </div>
                 </div>
               </div>
