@@ -5,7 +5,7 @@ export const singleOption = (optionData: any): Option => {
         id: optionData.id,
         name: optionData.name,
         description: optionData.description,
-        basePrice: optionData.base_price,
+        basePrice: parseFloat(optionData.base_price),
         inStock: optionData.in_stock,
     }
 }
