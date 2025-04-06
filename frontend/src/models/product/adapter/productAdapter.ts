@@ -6,13 +6,14 @@ export const singleProduct = (productData: any): Product => {
     id: productData.id,
     name: productData.name,
     description: productData.description,
+    image_url: productData.image_url || null,
     components: productData.components.map((component: any) => {
       return singleComponent(component)
     })
   };
-};
+}
 
-export const multipleProduct = (productsData: any): Product[] => {
+export const multipleProduct = (productsData: any[]): Product[] => {
   if (Array.isArray(productsData)) {
     const products = productsData.map((product) => {
       if (product?.id === undefined) {
@@ -27,25 +28,58 @@ export const multipleProduct = (productsData: any): Product[] => {
   }
 }
 
-export const updateProduct = (productData: Product): any => {
-  return {
-    id: productData.id,
-    name: productData.name,
-    description: productData.description,
-    components_attributes: productData.components.map(component => ({
-      id: component.id || undefined,
-      name: component.name,
-      description: component.description,
-      required: component.required,
-      _destroy: component._destroy || false,
-      options_attributes: component.options.map(option => ({
-        id: option.id || undefined,
-        name: option.name,
-        description: option.description,
-        base_price: option.basePrice,
-        in_stock: option.inStock,
-        _destroy: option._destroy || false,
-      })),
-    })),
+export const updateProduct = (product: Product): any => {
+  const formData = new FormData();
+  
+  formData.append('product[name]', product.name);
+  if (product.description) {
+    formData.append('product[description]', product.description);
   }
+  
+  if (product.image instanceof File) {
+    formData.append('product[image]', product.image);
+  }
+  
+  product.components.forEach((component, cIndex) => {
+    const componentPrefix = `product[components_attributes][${cIndex}]`;
+    
+    if (component.id) {
+      formData.append(`${componentPrefix}[id]`, component.id.toString());
+    }
+    
+    formData.append(`${componentPrefix}[name]`, component.name);
+    
+    if (component.description) {
+      formData.append(`${componentPrefix}[description]`, component.description);
+    }
+    
+    formData.append(`${componentPrefix}[required]`, component.required ? 'true' : 'false');
+    
+    if (component._destroy) {
+      formData.append(`${componentPrefix}[_destroy]`, 'true');
+    }
+    
+    component.options.forEach((option, oIndex) => {
+      const optionPrefix = `${componentPrefix}[options_attributes][${oIndex}]`;
+      
+      if (option.id) {
+        formData.append(`${optionPrefix}[id]`, option.id.toString());
+      }
+      
+      formData.append(`${optionPrefix}[name]`, option.name);
+      
+      if (option.description) {
+        formData.append(`${optionPrefix}[description]`, option.description);
+      }
+      
+      formData.append(`${optionPrefix}[base_price]`, option.basePrice.toString());
+      formData.append(`${optionPrefix}[in_stock]`, option.inStock ? 'true' : 'false');
+      
+      if (option._destroy) {
+        formData.append(`${optionPrefix}[_destroy]`, 'true');
+      }
+    });
+  });
+  
+  return formData;
 }

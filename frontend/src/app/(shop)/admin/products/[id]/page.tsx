@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Product} from '@/models/product/domain/product';
+import { useState, useEffect, useRef } from 'react';
+import { Product } from '@/models/product/domain/product';
 import { productRepository } from '@/models/product/infrastructure/productRepository';
 import { useParams, useRouter } from "next/navigation";
 import ComponentCard from '@/components/products/componentCard';
@@ -16,13 +16,15 @@ const ProductDetails = () => {
   const [isDirty, setIsDirty] = useState(false);
   const router = useRouter();
   const { showAlert } = useAlert();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   
   useEffect(() => {
     const fetchData = async () => {
       try {
         loadProduct();
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching product:", error);
       }
     };
 
@@ -32,9 +34,10 @@ const ProductDetails = () => {
   const loadProduct = async () => {
     try {
       setLoading(true);
-      const productId = Number(id)
+      const productId = Number(id);
       const data = await productRepository.getProduct(productId);
       setProduct(data);
+     
       setLoading(false);
     } catch (error) {
       showAlert('error', 'Load Error', 'Failed to load product data.');
@@ -46,6 +49,26 @@ const ProductDetails = () => {
     if (!product) return;
     setProduct({ ...product, [field]: value });
     setIsDirty(true);
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!product || !e.target.files || e.target.files.length === 0) return;
+    
+    const file = e.target.files[0];
+    
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+    
+    setProduct({ ...product, image: file });
+    setIsDirty(true);
+    
+    return () => URL.revokeObjectURL(objectUrl);
+  };
+
+  const triggerFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   const handleComponentChange = (componentIndex: number, field: keyof Component, value: any) => {
@@ -223,6 +246,68 @@ const ProductDetails = () => {
             rows={3}
           />
         </div>
+        
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Product Image</label>
+          <div className="flex items-start gap-4">
+            <div 
+              className="w-48 h-48 border border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+              onClick={triggerFileInput}
+            >
+              {(previewUrl || product.image_url) ? (
+                <div className="relative w-full h-full">
+                  <img 
+                    src={previewUrl ? `${previewUrl}` : `http://localhost:3000${product.image_url}`} 
+                    alt="Product preview" 
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
+              ) : (
+                <div className="text-center p-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40"
+                    height="40"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mx-auto mb-2 text-gray-400"
+                  >
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21 15 16 10 5 21" />
+                  </svg>
+                  <p className="text-sm text-gray-500">Click to upload image</p>
+                </div>
+              )}
+            </div>
+            <div>
+              <button
+                type="button"
+                onClick={triggerFileInput}
+                className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+              >
+                Upload Image
+              </button>
+              <p className="text-xs text-gray-500 mt-2">
+                Supported formats: JPG, PNG, GIF, WEBP
+              </p>
+              <p className="text-xs text-gray-500">
+                Click on the image to change it
+              </p>
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+          </div>
+        </div>
       </div>
       
       <div className="mb-6">
@@ -273,7 +358,7 @@ const ProductDetails = () => {
           onClick={handleSubmit}
           disabled={!isDirty}
           className={`px-6 py-3 rounded-lg font-medium ${
-            isDirty ? 'bg-indigo-600 text-white hover:bg-indigo800' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            isDirty ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }`}
         >
           Update
