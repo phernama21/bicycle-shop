@@ -27,5 +27,10 @@ export const productRepository = {
     );
     
     return singleProduct(response.data);
+  },
+
+  async createProduct(productName: string): Promise<Product> {
+    const response = await apiClient.post("/products", {name: productName})
+    return singleProduct(response.data.product)
   }
 };

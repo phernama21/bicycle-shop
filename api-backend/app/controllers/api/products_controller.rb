@@ -23,6 +23,11 @@ class Api::ProductsController < ApiController
       render json: { errors: product.errors.full_messages }, status: :unprocessable_entity
     end
   end
+
+  def create
+    product = Product.create!(name: params[:name])
+    render json: {product: product_with_image_url(product)}
+  end
   
   private
   
