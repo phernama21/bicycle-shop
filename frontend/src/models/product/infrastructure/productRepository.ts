@@ -1,5 +1,5 @@
 import apiClient from "@/lib/api";
-import { Product, ProductReduced } from "../domain/product";
+import { Product } from "../domain/product";
 import { multipleProduct, singleProduct, updateProduct } from "../adapter/productAdapter";
 
 
