@@ -4,11 +4,11 @@ class Order < ApplicationRecord
     has_many :products, through: :order_items
 
     accepts_nested_attributes_for :order_items, allow_destroy: true
-    
-    enum :status, [:pending, :paid, :cancelled]
-    
+        
     validates :total_amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
     
+    enum :status, { pending: 0, paid: 1, cancelled: 2 }
+
     def front_data
       order_data = Hash.new
       order_data[:id] = self.id

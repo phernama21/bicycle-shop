@@ -11,7 +11,7 @@ class Api::CartsController < ApiController
         if cart.update(cart_params)
         render json: { cart: cart.front_data }
         else
-        render json: { errors: @cart.errors.full_messages }, status: :unprocessable_entity
+        render json: { errors: cart.errors.full_messages }, status: :unprocessable_entity
         end
     end
 

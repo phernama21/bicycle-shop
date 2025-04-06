@@ -6,7 +6,7 @@ class Api::OrdersController < ApiController
     end
 
     def create
-        order = Order.create!(user: current_api_user, total_amount: 0)
+        order = Order.create!(user_id: current_api_user.id, total_amount: 0)
         order.create_from_cart(params[:cart_id].to_i)
         head :no_content
     end

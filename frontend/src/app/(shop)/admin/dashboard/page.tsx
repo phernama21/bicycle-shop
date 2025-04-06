@@ -126,7 +126,7 @@ export default function AdminDashboardPage() {
             <div className="absolute inset-0 rounded-lg bg-indigo-500/5 opacity-0 transition-opacity group-hover:opacity-100"></div>
           </Link>
 
-          <Link href="/admin/shopping-carts" className="relative lg:row-span-2 group">
+          <Link href="/admin/orders" className="relative lg:row-span-2 group">
             <div className="absolute inset-px rounded-lg bg-white max-lg:rounded-b-2xl lg:rounded-r-2xl"></div>
             <div className="relative flex h-full flex-col overflow-hidden rounded-lg max-lg:rounded-b-2xl lg:rounded-r-2xl">
               <div className="px-8 pt-5 pb-3 sm:px-10 sm:pb-0">

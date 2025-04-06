@@ -6,7 +6,7 @@ export const singleOrder = (orderData: any): Order => {
         id: orderData.id,
         user: single(orderData.user),
         status: orderData.status,
-        amount: orderData.total_amount,
+        amount: parseFloat(orderData.total_amount),
         nItems: orderData.number_of_items,
         createdAt: orderData.created_at
     }
