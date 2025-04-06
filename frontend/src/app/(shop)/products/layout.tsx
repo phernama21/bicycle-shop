@@ -3,8 +3,9 @@
 import { ReactNode } from 'react';
 import { useUser } from '@/contexts/UserContext';
 import { CartProvider } from '@/contexts/CartContext';
+import CartComponent from '@/components/carts/cart';
 
-export default function DashboardLayout({ children }: { children: ReactNode }) {
+export default function ProductsLayout({ children }: { children: ReactNode }) {
   const { loading } = useUser();
    
   if (loading) {
@@ -14,6 +15,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
         <CartProvider>
             {children}
+            <CartComponent />
         </CartProvider>
   )
 }

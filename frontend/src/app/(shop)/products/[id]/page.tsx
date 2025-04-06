@@ -1,15 +1,16 @@
 'use client'
 
-import CartComponent from '@/components/carts/cart';
 import { useCart } from '@/contexts/CartContext';
 import { CartItem, CartItemOption } from '@/models/cart/domain/cart';
 import { Product } from '@/models/product/domain/product';
 import { productRepository } from '@/models/product/infrastructure/productRepository';
 import { Rule } from '@/models/rule/domain/rule';
 import { ruleRepository } from '@/models/rule/infrastructure/ruleRepository';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
 export default function ProductCustomizer() {
+  const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [rules, setRules] = useState<Rule[]>([]);
   const [loading, setLoading] = useState(true);
@@ -18,11 +19,13 @@ export default function ProductCustomizer() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [optionPriceAdjustments, setOptionPriceAdjustments] = useState<Record<string, number>>({});
   const { addToCart, setCartOpen } = useCart();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
+      const productId = Number(id)
       setLoading(true);
-      const prod = await productRepository.getProduct();
+      const prod = await productRepository.getProduct(productId);
       const allRules = await ruleRepository.getAllRules();
       setProduct(prod);
       setRules(allRules);
@@ -180,6 +183,10 @@ export default function ProductCustomizer() {
     return adjustmentKey in optionPriceAdjustments;
   };
 
+  const handleBackClick = () => {
+    router.push("/products");
+  };
+
   const handleAddToCart = async () => {
     if (!product || !isConfigurationComplete()) return;
     
@@ -222,8 +229,30 @@ export default function ProductCustomizer() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">{product.name}</h1>
-        <p className="text-gray-600 mb-8">{product.description}</p>
+      <div className="flex items-center mb-4">
+          <button 
+            onClick={handleBackClick}
+            className="mr-3 p-1 rounded-full hover:bg-gray-100 transition-colors"
+            aria-label="Go back to dashboard"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-indigo-600"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <h1 className="text-2xl font-bold text-indigo-600">{product.name}</h1>
+          <p className="text-gray-600 mb-8">{product.description}</p>
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-1 bg-white p-6 rounded-lg shadow">
@@ -282,7 +311,7 @@ export default function ProductCustomizer() {
           
           <div className="md:col-span-2 bg-white p-6 rounded-lg shadow">
             <div className='flex justify-between items-center mb-6'>
-              <h2 className="text-xl font-semibold">Customize Your Bicycle</h2>
+              <h2 className="text-xl font-semibold">Customize Your {product.name}</h2>
               {Object.keys(selections).length > 0 && 
                 <button
                     onClick={clearAllSelections}
@@ -363,8 +392,6 @@ export default function ProductCustomizer() {
           </div>
         </div>
       </div>
-      
-      <CartComponent />
     </div>
   );
 }

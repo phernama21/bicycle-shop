@@ -13,7 +13,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   
   useEffect(() => {
     if (!loading && user && !user.isAdmin) {
-      router.push('/dashboard');
+      router.push('/products');
     } else if (!loading && !user) {
       router.push('/login');
     }

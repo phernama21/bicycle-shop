@@ -5,16 +5,19 @@ import { ArrowUp, ArrowDown, Plus, Pencil, Trash2 } from 'lucide-react';
 
 import { Component } from '@/models/component/domain/component';
 import { Rule } from '@/models/rule/domain/rule';
+import { Product } from '@/models/product/domain/product';
 import Modal from '@/components/ui/modal';
 import { ruleRepository } from '@/models/rule/infrastructure/ruleRepository';
 import { componentRepository } from '@/models/component/infrastructre/componentRepository';
-import { useAlert } from '@/contexts/AlertContext';
+import { productRepository } from '@/models/product/infrastructure/productRepository';
 import { useRouter } from 'next/navigation';
 import RuleDetailsModal from '@/components/rules/ruleDetailsModal';
+import { useAlert } from '@/contexts/AlertContext';
 
 export default function RulesPage() {
   const [rules, setRules] = useState<Rule[]>([]);
   const [components, setComponents] = useState<Component[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -31,8 +34,10 @@ export default function RulesPage() {
         setLoading(true);
         const allRules = await ruleRepository.getAllRules();
         const allComponents = await componentRepository.getAllComponents();
+        const allProducts = await productRepository.getAllProducts();
         setRules(allRules);
         setComponents(allComponents);
+        setProducts(allProducts); 
       } catch (err) {
         showAlert('error', 'Load Error', 'Failed to load rules data.');
       } finally {
@@ -70,6 +75,9 @@ export default function RulesPage() {
       } else if (sortField === 'optionEffect') {
         aValue = a.optionEffect?.name || '';
         bValue = b.optionEffect?.name || '';
+      } else if (sortField === 'product') {
+        aValue = a.product?.name || '';
+        bValue = b.product?.name || '';
       } else {
         aValue = a[sortField];
         bValue = b[sortField];
@@ -151,6 +159,10 @@ export default function RulesPage() {
     return sortDirection === 'asc' ? <ArrowUp className="ml-1 h-4 w-4 inline" /> : <ArrowDown className="ml-1 h-4 w-4 inline" />;
   };
 
+  const getProductName = (rule: Rule) => {
+    return rule.product?.name || 'All Products';
+  };
+
   if (loading) return <div className="flex justify-center items-center h-64">Loading...</div>;
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
@@ -201,6 +213,15 @@ export default function RulesPage() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
+              <th 
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                onClick={() => handleSort('product')}
+              >
+                <div className="flex items-center">
+                  Product
+                  {getSortIcon('product')}
+                </div>
+              </th>
               <th 
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                 onClick={() => handleSort('componentCondition')}
@@ -264,6 +285,9 @@ export default function RulesPage() {
             {sortedRules().map((rule) => (
               <tr key={rule.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {getProductName(rule)}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {rule.componentCondition?.name || 'N/A'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -309,7 +333,7 @@ export default function RulesPage() {
             ))}
             {rules.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-6 py-4 text-center text-sm text-gray-500">
+                <td colSpan={8} className="px-6 py-4 text-center text-sm text-gray-500">
                   No rules found. Create a new rule to get started.
                 </td>
               </tr>
@@ -324,6 +348,7 @@ export default function RulesPage() {
         onSave={saveRule}
         currentRule={currentRule}
         components={components}
+        products={products}
       />
 
       <Modal

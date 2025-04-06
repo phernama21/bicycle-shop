@@ -40,6 +40,7 @@ class Api::RulesController < ApiController
 
     def rule_params
         params.require(:rule).permit(
+            :product_id,
             :component_condition_id,
             :option_condition_id,
             :component_effect_id,

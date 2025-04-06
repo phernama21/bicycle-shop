@@ -6,3 +6,8 @@ export interface Product {
     description: string;
     components: Component[]
 }
+
+export interface ProductReduced {
+    id: number;
+    name: string;
+}

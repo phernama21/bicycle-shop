@@ -54,7 +54,7 @@ export default function ProductsListPage() {
   };
   
   const handleBackClick = () => {
-    router.push("admin/dashboard");
+    router.push("/admin/dashboard");
   };
   
   const indexOfLastProduct = currentPage * productsPerPage;

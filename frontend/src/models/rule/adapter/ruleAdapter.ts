@@ -8,6 +8,7 @@ export const single = (ruleData: any): Rule => {
     priceAdjustment: parseFloat(ruleData.price_adjustment),
     componentCondition: ruleData.component_condition,
     optionCondition: ruleData.option_condition,
+    product: ruleData.product,
     componentEffect: ruleData.component_effect,
     optionEffect: ruleData.option_effect,
   }
@@ -30,6 +31,7 @@ export const multiple = (ruleData: any): Rule[] => {
 
 export const toBackend = (rule: newRule): any => {
   return {
+    product_id: rule.productId,
     component_condition_id: rule.componentConditionId,
     option_condition_id: rule.optionConditionId,
     component_effect_id: rule.componentEffectId,

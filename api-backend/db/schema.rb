@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_06_151412) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_06_171452) do
   create_table "cart_item_options", force: :cascade do |t|
     t.integer "cart_item_id"
     t.integer "option_id"
@@ -108,10 +108,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_06_151412) do
     t.decimal "price_adjustment", precision: 10, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "product_id"
     t.index ["component_condition_id"], name: "index_rules_on_component_condition_id"
     t.index ["component_effect_id"], name: "index_rules_on_component_effect_id"
     t.index ["option_condition_id"], name: "index_rules_on_option_condition_id"
     t.index ["option_effect_id"], name: "index_rules_on_option_effect_id"
+    t.index ["product_id"], name: "index_rules_on_product_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -158,4 +160,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_06_151412) do
   add_foreign_key "rules", "components", column: "component_effect_id"
   add_foreign_key "rules", "options", column: "option_condition_id"
   add_foreign_key "rules", "options", column: "option_effect_id"
+  add_foreign_key "rules", "products"
 end

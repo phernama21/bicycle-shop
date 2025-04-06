@@ -1,5 +1,5 @@
 import apiClient from "@/lib/api";
-import { Product } from "../domain/product";
+import { Product, ProductReduced } from "../domain/product";
 import { multipleProduct, singleProduct, updateProduct } from "../adapter/productAdapter";
 
 
@@ -11,7 +11,6 @@ export const productRepository = {
 
     async getAllProducts(): Promise<Product[]> {
         const response = await apiClient.get("/products");
-        console.log("RESPONSE", response)
         return multipleProduct(response.data)
     },
     

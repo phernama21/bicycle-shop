@@ -39,7 +39,7 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
         if (user?.isAdmin) {
           router.push('/admin/dashboard');
         } else {
-          router.push('/dashboard');
+          router.push('/products');
         }
         setTimeout(() => setIsNavigating(false), 500);
       }
@@ -55,7 +55,7 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
       if (newMode === 'admin') {
         router.push('/admin/dashboard');
       } else {
-        router.push('/dashboard');
+        router.push('/products');
       }
       setTimeout(() => setIsNavigating(false), 500);
     }
@@ -66,7 +66,7 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
     if (viewMode === 'admin') {
       router.push('/admin/dashboard');
     } else {
-      router.push('/dashboard');
+      router.push('/products');
     }
     setTimeout(() => setIsNavigating(false), 500);
   };

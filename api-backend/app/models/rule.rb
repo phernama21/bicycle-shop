@@ -3,6 +3,7 @@ class Rule < ApplicationRecord
     belongs_to :option_condition, class_name: 'Option'
     belongs_to :component_effect, class_name: 'Component'
     belongs_to :option_effect, class_name: 'Option'
+    belongs_to :product
     
     validate :no_contradictory_rules
     validate :no_duplicate_conditional_prices
@@ -15,6 +16,7 @@ class Rule < ApplicationRecord
       rule_data[:component_condition] = self.component_condition
       rule_data[:option_condition] = self.option_condition
       rule_data[:component_effect] = self.component_effect
+      rule_data[:product] = self.product.as_json(ony: [:id, :name])
       rule_data[:option_effect] = self.option_effect
       rule_data[:effect_type] = self.effect_type
       rule_data[:price_adjustment] = self.price_adjustment
