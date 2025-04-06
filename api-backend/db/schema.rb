@@ -10,7 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_05_112555) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_06_091302) do
+  create_table "cart_item_options", force: :cascade do |t|
+    t.integer "cart_item_id"
+    t.integer "option_id"
+    t.decimal "price", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cart_item_id"], name: "index_cart_item_options_on_cart_item_id"
+    t.index ["option_id"], name: "index_cart_item_options_on_option_id"
+  end
+
+  create_table "cart_items", force: :cascade do |t|
+    t.integer "cart_id"
+    t.integer "product_id"
+    t.integer "quantity", default: 1
+    t.decimal "price", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cart_id"], name: "index_cart_items_on_cart_id"
+    t.index ["product_id"], name: "index_cart_items_on_product_id"
+  end
+
+  create_table "carts", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "status", default: "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_carts_on_user_id"
+  end
+
   create_table "components", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -30,6 +59,36 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_05_112555) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["component_id"], name: "index_options_on_component_id"
+  end
+
+  create_table "order_item_options", force: :cascade do |t|
+    t.integer "order_item_id"
+    t.integer "option_id"
+    t.decimal "price", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["option_id"], name: "index_order_item_options_on_option_id"
+    t.index ["order_item_id"], name: "index_order_item_options_on_order_item_id"
+  end
+
+  create_table "order_items", force: :cascade do |t|
+    t.integer "order_id"
+    t.integer "product_id"
+    t.integer "quantity", default: 1
+    t.decimal "price", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["product_id"], name: "index_order_items_on_product_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "user_id"
+    t.decimal "total_amount", precision: 10, scale: 2
+    t.string "status", default: "pending"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -83,8 +142,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_05_112555) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "cart_item_options", "cart_items"
+  add_foreign_key "cart_item_options", "options"
+  add_foreign_key "cart_items", "carts"
+  add_foreign_key "cart_items", "products"
+  add_foreign_key "carts", "users"
   add_foreign_key "components", "products"
   add_foreign_key "options", "components"
+  add_foreign_key "order_item_options", "options"
+  add_foreign_key "order_item_options", "order_items"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "order_items", "products"
+  add_foreign_key "orders", "users"
   add_foreign_key "rules", "components", column: "component_condition_id"
   add_foreign_key "rules", "components", column: "component_effect_id"
   add_foreign_key "rules", "options", column: "option_condition_id"

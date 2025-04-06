@@ -220,7 +220,7 @@ export default function ProductCustomizer() {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-1 bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Preview</h2>
+            <h2 className="text-xl font-semibold mb-4">Summary</h2>
             <div className="aspect-square bg-gray-100 flex flex-col p-4 rounded mb-4 overflow-y-auto">
               {Object.keys(selections).length > 0 ? (
                 <>

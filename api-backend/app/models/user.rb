@@ -5,6 +5,9 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :validatable
   include DeviseTokenAuth::Concerns::User
 
+  has_many :carts
+  has_many :orders
+
   def front_data
     user_data = self.as_json(only: [:id, :email, :first_name, :last_name, :is_admin])
     return user_data
