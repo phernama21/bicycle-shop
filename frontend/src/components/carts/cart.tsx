@@ -1,8 +1,7 @@
 'use client';
 
 import { useCart } from '@/contexts/CartContext';
-import React from 'react';
-
+import React, { useEffect } from 'react';
 
 const CartComponent: React.FC = () => {
   const { 
@@ -10,10 +9,31 @@ const CartComponent: React.FC = () => {
     cartOpen, 
     setCartOpen, 
     removeFromCart, 
+    updateCartItemQuantity,
     cartTotal 
   } = useCart();
   
+  useEffect(() => {
+    if (cartOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [cartOpen]);
+  
   if (!cart) return null;
+  
+  const handleQuantityChange = async (itemId: number, newQuantity: number) => {
+    if (newQuantity > 0) {
+      await updateCartItemQuantity(itemId, newQuantity);
+    } else {
+      await removeFromCart(itemId);
+    }
+  };
   
   return (
     <>
@@ -25,8 +45,8 @@ const CartComponent: React.FC = () => {
             <div className="absolute inset-0 overflow-hidden">
               <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
                 <div className="pointer-events-auto w-screen max-w-md transform transition ease-in-out duration-500">
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-                    <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+                  <div className="flex h-full flex-col bg-white shadow-xl">
+                    <div className="flex-1 px-4 py-6 sm:px-6 overflow-y-auto">
                       <div className="flex items-start justify-between">
                         <h2 className="text-lg font-medium text-gray-900">Shopping cart</h2>
                         <div className="ml-3 flex h-7 items-center">
@@ -66,7 +86,26 @@ const CartComponent: React.FC = () => {
                                     </div>
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
-                                    <p className="text-gray-500">Qty {item.quantity}</p>
+                                    <div className="flex items-center">
+                                      <span className="text-gray-500 mr-2">Qty</span>
+                                      <div className="flex items-center border rounded">
+                                        <button
+                                          type="button"
+                                          onClick={() => item.id && handleQuantityChange(item.id, item.quantity - 1)}
+                                          className="px-2 py-1 text-gray-600 hover:bg-gray-100"
+                                        >
+                                          -
+                                        </button>
+                                        <span className="px-2 py-1">{item.quantity}</span>
+                                        <button
+                                          type="button"
+                                          onClick={() => item.id && handleQuantityChange(item.id, item.quantity + 1)}
+                                          className="px-2 py-1 text-gray-600 hover:bg-gray-100"
+                                        >
+                                          +
+                                        </button>
+                                      </div>
+                                    </div>
                                     
                                     <div className="flex">
                                       <button

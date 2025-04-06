@@ -38,5 +38,15 @@ export const cartRepository = {
       return null;
     }
   },
+  
+  async updateCartItemQuantity(itemId: number, quantity: number): Promise<Cart | null> {
+    try {
+      const response = await apiClient.put(`/items/${itemId}/quantity`, { quantity });
+      return singleCart(response.data.cart);
+    } catch (error) {
+      console.error('Error updating cart item quantity:', error);
+      return null;
+    }
+  }
 
 }

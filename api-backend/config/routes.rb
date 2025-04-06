@@ -30,6 +30,7 @@ Rails.application.routes.draw do
 
     #CART ITEMS
     delete "items/:id" => "cart_items#delete"
+    put "items/:id/quantity" => "cart_items#update_quantity"
   end
   
   

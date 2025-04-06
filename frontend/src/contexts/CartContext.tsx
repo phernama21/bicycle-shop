@@ -12,6 +12,7 @@ interface CartContextType {
   setCartOpen: (open: boolean) => void;
   addToCart: (item: CartItem) => Promise<void>;
   removeFromCart: (itemId: number) => Promise<void>;
+  updateCartItemQuantity: (itemId: number, quantity: number) => Promise<void>;
   cartTotal: number;
 }
 
@@ -47,7 +48,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const updatedCart = await cartRepository.addToCart(item);
     if (updatedCart) {
       setCart(updatedCart);
-      showAlert('success', 'Success!', 'Product added successfully.')
     }
     setLoading(false);
   };
@@ -58,6 +58,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (updatedCart) {
       setCart(updatedCart);
       showAlert('success', 'Success!', 'Product removed successfully.');
+    }
+    setLoading(false);
+  };
+
+  const updateCartItemQuantity = async (itemId: number, quantity: number) => {
+    setLoading(true);
+    const updatedCart = await cartRepository.updateCartItemQuantity(itemId, quantity);
+    if (updatedCart) {
+      setCart(updatedCart);
+      showAlert('success', 'Success!', 'Quantity updated successfully.');
     }
     setLoading(false);
   };
@@ -75,6 +85,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setCartOpen,
       addToCart,
       removeFromCart,
+      updateCartItemQuantity,
       cartTotal
     }}>
       {children}
