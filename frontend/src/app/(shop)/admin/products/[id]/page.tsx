@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react';
 import { Product} from '@/models/product/domain/product';
 import { productRepository } from '@/models/product/infrastructure/productRepository';
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import ComponentCard from '@/components/products/componentCard';
 import { useAlert } from '@/contexts/AlertContext';
 import { Component } from '@/models/component/domain/component';
 import { Option } from '@/models/option/domain/option';
 
 const ProductDetails = () => {
+  const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [isDirty, setIsDirty] = useState(false);
@@ -31,7 +32,8 @@ const ProductDetails = () => {
   const loadProduct = async () => {
     try {
       setLoading(true);
-      const data = await productRepository.getProduct();
+      const productId = Number(id)
+      const data = await productRepository.getProduct(productId);
       setProduct(data);
       setLoading(false);
     } catch (error) {
@@ -144,7 +146,7 @@ const ProductDetails = () => {
   };
 
   const handleBackClick = () => {
-    router.push("/admin/dashboard");
+    router.push("/admin/products");
   };
 
   const handleSubmit = async () => {

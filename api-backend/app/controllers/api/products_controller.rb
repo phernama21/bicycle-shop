@@ -2,15 +2,25 @@ class Api::ProductsController < ApiController
     before_action :authenticate_api_user!
     before_action :set_product, only: [:load_base_product]
 
+    def load
+      render json: Product.all.map{|p| p.as_json(include: { components: { include: :options } })}
+    end
+
+    def load_single
+      product = Product.find_by_id(params[:id])
+      render json: product.as_json(include: { components: { include: :options } })
+    end
+
     def load_base_product
         render json: Product.first.as_json(include: { components: { include: :options } })
     end
 
     def update
-      if Product.first.update(product_params)
-        render json: @product.as_json(include: { components: { include: :options } })
+      product = Product.find_by_id(params[:id])
+      if product.update(product_params)
+        render json: product.as_json(include: { components: { include: :options } })
       else
-        render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
+        render json: { errors: product.errors.full_messages }, status: :unprocessable_entity
       end
     end
     

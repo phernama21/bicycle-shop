@@ -12,8 +12,10 @@ Rails.application.routes.draw do
     put "users/:id" => "users#change_admin_status"
 
     #PRODUCTS
+    get "products" => "products#load"
     get "products/base" => "products#load_base_product"
-    put "products" => "products#update"
+    get "products/:id" => "products#load_single"
+    put "products/:id" => "products#update"
 
     #RULES
     get "rules" => "rules#load"

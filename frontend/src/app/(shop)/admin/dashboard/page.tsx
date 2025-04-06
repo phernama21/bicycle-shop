@@ -66,13 +66,13 @@ export default function AdminDashboardPage() {
             <div className="absolute inset-0 rounded-lg bg-indigo-500/5 opacity-0 transition-opacity group-hover:opacity-100"></div>
           </Link>
 
-          <Link href="/admin/components" className="relative max-lg:row-start-1 group">
+          <Link href="/admin/products" className="relative max-lg:row-start-1 group">
             <div className="absolute inset-px rounded-lg bg-white max-lg:rounded-t-2xl"></div>
             <div className="relative flex h-full flex-col overflow-hidden rounded-lg max-lg:rounded-t-2xl">
               <div className="px-8 pt-8 sm:px-10 sm:pt-5">
-                <p className="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">Components</p>
+                <p className="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">Products</p>
                 <p className="mt-2 max-w-lg text-sm text-gray-600 max-lg:text-center">
-                  Create, modify and add options to bicycle components.
+                  Create, modify and add components to your products.
                 </p>
               </div>
               <div className="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 sm:pt-5 sm:pb-5 lg:pb-5">

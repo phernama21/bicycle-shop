@@ -12,6 +12,21 @@ export const singleProduct = (productData: any): Product => {
   };
 };
 
+export const multipleProduct= (productsData: any): Product[] => {
+  if(Array.isArray(productsData)){
+      const products = productsData.map((product) => {
+        if(product?.id === undefined){
+          throw new Error('Product has no id.')
+        }else{
+          return singleProduct(product);
+        }
+      })
+      return products
+    }else{
+      return []
+    }
+}
+
 export const updateProduct = (productData: Product): any => {
     return {
             id: productData.id,
