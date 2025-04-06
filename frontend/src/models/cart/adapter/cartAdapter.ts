@@ -20,6 +20,7 @@ export const singleItem = (itemData: any): CartItem=> {
         productName: itemData.product_name,
         price: parseFloat(itemData.price),
         quantity: itemData.quantity,
+        imageSrc: itemData.img_url,
         options: itemData.cart_item_options.map((option:any) => {
             return singleOption(option)
         })

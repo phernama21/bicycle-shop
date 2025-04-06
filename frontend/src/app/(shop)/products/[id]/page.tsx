@@ -215,6 +215,7 @@ export default function ProductCustomizer() {
       price: totalPrice,
       quantity: 1,
       options: selectedOptions ,
+      imageSrc: product.image_url
     };
     
     await addToCart(cartItem);

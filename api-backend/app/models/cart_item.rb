@@ -17,6 +17,7 @@ class CartItem < ApplicationRecord
       item_data[:product_name] = self.product.name
       item_data[:price] = self.price
       item_data[:quantity] = self.quantity
+      item_data[:img_url] = self.product.image&.url
       item_data[:cart_item_options] = self.cart_item_options.map{|o| o.front_data}
 
       return item_data
