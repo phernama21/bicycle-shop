@@ -22,7 +22,14 @@ Rails.application.routes.draw do
     delete "rules/:id" => "rules#delete"
 
     #COMPONENTS
-     get "components" => "components#load"
+    get "components" => "components#load"
+
+    #CARTS
+    get "cart" => "carts#load_single"
+    post "cart" => "carts#add_to_cart"
+
+    #CART ITEMS
+    delete "items/:id" => "cart_items#delete"
   end
   
   

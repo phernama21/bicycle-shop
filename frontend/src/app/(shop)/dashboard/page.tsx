@@ -1,5 +1,8 @@
 'use client'
 
+import CartComponent from '@/components/carts/cart';
+import { useCart } from '@/contexts/CartContext';
+import { CartItem, CartItemOption } from '@/models/cart/domain/cart';
 import { Product } from '@/models/product/domain/product';
 import { productRepository } from '@/models/product/infrastructure/productRepository';
 import { Rule } from '@/models/rule/domain/rule';
@@ -13,10 +16,9 @@ export default function ProductCustomizer() {
   const [selections, setSelections] = useState<Record<number, number>>({});
   const [validOptions, setValidOptions] = useState<Record<number, number[]>>({});
   const [totalPrice, setTotalPrice] = useState(0);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [cart, setCart] = useState<any[]>([]);
   const [optionPriceAdjustments, setOptionPriceAdjustments] = useState<Record<string, number>>({});
-  
+  const { addToCart, setCartOpen } = useCart();
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -164,38 +166,6 @@ export default function ProductCustomizer() {
     );
   };
   
-  const addToCart = () => {
-    if (!product || !isConfigurationComplete()) return;
-    
-    const selectedOptions = product.components.map(component => {
-      if (component.id === undefined) return null;
-      
-      const selectedOptionId = selections[component.id];
-      const option = component.options.find(o => o.id === selectedOptionId);
-      return option ? `${component.name}: ${option.name}` : null;
-    }).filter(Boolean);
-    
-    const cartItem = {
-      id: Date.now(),
-      name: product.name,
-      price: totalPrice.toFixed(2),
-      options: selectedOptions,
-      imageSrc: "/api/placeholder/400/320",
-      quantity: 1
-    };
-    
-    setCart(prev => [...prev, cartItem]);
-    setCartOpen(true);
-    
-    clearAllSelections();
-    setTotalPrice(0)
-  };
-  
-  const removeFromCart = (itemId: number) => {
-    setCart(prev => prev.filter(item => item.id !== itemId));
-  };
-  
-  const cartTotal = cart.reduce((total, item) => total + (parseFloat(item.price) * item.quantity), 0);
   
   const getOptionDisplayPrice = (componentId: number, optionId: number, basePrice: number) => {
     const adjustmentKey = `${componentId}-${optionId}`;
@@ -208,6 +178,43 @@ export default function ProductCustomizer() {
   const hasAdjustedPrice = (componentId: number, optionId: number) => {
     const adjustmentKey = `${componentId}-${optionId}`;
     return adjustmentKey in optionPriceAdjustments;
+  };
+
+  const handleAddToCart = async () => {
+    if (!product || !isConfigurationComplete()) return;
+    
+    const selectedOptions: CartItemOption[] = product.components.map(component => {
+      if (component.id === undefined) return null;
+      
+      const selectedOptionId = selections[component.id];
+      if (selectedOptionId === undefined) return null;
+      
+      const option = component.options.find(o => o.id === selectedOptionId);
+      if (!option) return null;
+      
+      const price = getOptionDisplayPrice(component.id, selectedOptionId, option.basePrice);
+      
+      return {
+        optionId: selectedOptionId,
+        optionName: option.name,
+        componentName: component.name,
+        price: price
+      };
+    }).filter((item): item is CartItemOption => item !== null);
+    
+    const cartItem: CartItem = {
+      product: product.id!,
+      productName: product.name,
+      price: totalPrice,
+      quantity: 1,
+      options: selectedOptions ,
+    };
+    
+    await addToCart(cartItem);
+    setCartOpen(true);
+    
+    clearAllSelections();
+    setTotalPrice(0);
   };
   
   if (loading || !product) return <div className="p-4">Loading...</div>;
@@ -258,7 +265,7 @@ export default function ProductCustomizer() {
               <p className="text-2xl font-bold text-gray-900">Total: €{totalPrice.toFixed(2)}</p>
               <div className="flex space-x-2 mt-4">
                 <button
-                  onClick={addToCart}
+                  onClick={handleAddToCart}
                   disabled={!isConfigurationComplete()}
                   className={`flex-1 py-3 px-4 rounded-md ${
                     isConfigurationComplete()
@@ -357,124 +364,7 @@ export default function ProductCustomizer() {
         </div>
       </div>
       
-      {cartOpen && (
-        <div className="relative z-10">
-          <div className="fixed inset-0 bg-gray-500/75 transition-opacity"></div>
-          
-          <div className="fixed inset-0 overflow-hidden">
-            <div className="absolute inset-0 overflow-hidden">
-              <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
-                <div className="pointer-events-auto w-screen max-w-md transform transition ease-in-out duration-500">
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-                    <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
-                      <div className="flex items-start justify-between">
-                        <h2 className="text-lg font-medium text-gray-900">Shopping cart</h2>
-                        <div className="ml-3 flex h-7 items-center">
-                          <button
-                            type="button"
-                            onClick={() => setCartOpen(false)}
-                            className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-                          >
-                            <span className="absolute -inset-0.5"></span>
-                            <span className="sr-only">Close panel</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                      
-                      <div className="mt-8">
-                        <div className="flow-root">
-                          <ul className="-my-6 divide-y divide-gray-200">
-                            {cart.map((item) => (
-                              <li key={item.id} className="flex py-6">
-                                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                  <img src={item.imageSrc} alt="Product" className="h-full w-full object-cover object-center" />
-                                </div>
-                                
-                                <div className="ml-4 flex flex-1 flex-col">
-                                  <div>
-                                    <div className="flex justify-between text-base font-medium text-gray-900">
-                                      <h3>{item.name}</h3>
-                                      <p className="ml-4">€{item.price}</p>
-                                    </div>
-                                    <div className="mt-1 text-sm text-gray-500">
-                                      {item.options.map((option: string, idx: number) => (
-                                        <p key={idx}>{option}</p>
-                                      ))}
-                                    </div>
-                                  </div>
-                                  <div className="flex flex-1 items-end justify-between text-sm">
-                                    <p className="text-gray-500">Qty {item.quantity}</p>
-                                    
-                                    <div className="flex">
-                                      <button
-                                        type="button"
-                                        onClick={() => removeFromCart(item.id)}
-                                        className="font-medium text-indigo-600 hover:text-indigo-500"
-                                      >
-                                        Remove
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                      <div className="flex justify-between text-base font-medium text-gray-900">
-                        <p>Subtotal</p>
-                        <p>€{cartTotal.toFixed(2)}</p>
-                      </div>
-                      <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
-                      <div className="mt-6">
-                        <a
-                          href="#"
-                          className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                        >
-                          Checkout
-                        </a>
-                      </div>
-                      <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-                        <p>
-                          or{' '}
-                          <button
-                            type="button"
-                            onClick={() => setCartOpen(false)}
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                          >
-                            Continue Shopping
-                            <span aria-hidden="true"> &rarr;</span>
-                          </button>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {cart.length > 0 && !cartOpen && (
-        <button 
-          onClick={() => setCartOpen(true)}
-          className="fixed bottom-8 right-8 bg-indigo-600 text-white rounded-full p-4 shadow-lg hover:bg-indigo-700 transition-colors"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-          </svg>
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-            {cart.length}
-          </span>
-        </button>
-      )}
+      <CartComponent />
     </div>
   );
 }
