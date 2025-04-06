@@ -7,10 +7,11 @@ const CartComponent: React.FC = () => {
   const { 
     cart, 
     cartOpen, 
+    cartTotal,
     setCartOpen, 
     removeFromCart, 
     updateCartItemQuantity,
-    cartTotal 
+    createOrder,
   } = useCart();
   
   useEffect(() => {
@@ -26,7 +27,8 @@ const CartComponent: React.FC = () => {
   }, [cartOpen]);
   
   if (!cart) return null;
-  
+
+ 
   const handleQuantityChange = async (itemId: number, newQuantity: number) => {
     if (newQuantity > 0) {
       await updateCartItemQuantity(itemId, newQuantity);
@@ -132,12 +134,12 @@ const CartComponent: React.FC = () => {
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                       <div className="mt-6">
-                        <a
-                          href="/checkout"
+                        <button
+                          onClick={createOrder}
                           className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                         >
                           Checkout
-                        </a>
+                        </button>
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                         <p>

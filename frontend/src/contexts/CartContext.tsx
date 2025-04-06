@@ -4,6 +4,7 @@ import { Cart, CartItem } from '@/models/cart/domain/cart';
 import { cartRepository } from '@/models/cart/infrastructure/cartRepository';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAlert } from './AlertContext';
+import { orderRepository } from '@/models/order/infrastructure/orderRepository';
 
 interface CartContextType {
   cart: Cart | null;
@@ -11,6 +12,7 @@ interface CartContextType {
   cartOpen: boolean;
   setCartOpen: (open: boolean) => void;
   addToCart: (item: CartItem) => Promise<void>;
+  createOrder: () => Promise<void>;
   removeFromCart: (itemId: number) => Promise<void>;
   updateCartItemQuantity: (itemId: number, quantity: number) => Promise<void>;
   cartTotal: number;
@@ -51,6 +53,20 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     setLoading(false);
   };
+
+  const createOrder = async() => {
+    setLoading(true);
+    const newOrder = await orderRepository.createOrder(cart!);
+    if (newOrder) {
+      showAlert('success', 'Success!', 'Order added successfully.');
+      setCart({
+        status: 'active',
+        items: []
+      });
+      setCartOpen(false);
+    }
+    setLoading(false);
+  }
   
   const removeFromCart = async (itemId: number) => {
     setLoading(true);
@@ -85,6 +101,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setCartOpen,
       addToCart,
       removeFromCart,
+      createOrder,
       updateCartItemQuantity,
       cartTotal
     }}>

@@ -109,15 +109,15 @@ export default function AdminDashboardPage() {
                 <div className="bg-gray-100 rounded-lg p-6 w-4/5">
                   <div className="flex items-center mb-2">
                     <div className="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
-                    <span className="text-xs text-gray-700">REQUIRE Rule</span>
+                    <span className="text-xs text-gray-700">REQUIRE</span>
                   </div>
                   <div className="flex items-center mb-2">
                     <div className="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
-                    <span className="text-xs text-gray-700">EXCLUDE Rule</span>
+                    <span className="text-xs text-gray-700">EXCLUDE</span>
                   </div>
                   <div className="flex items-center">
                     <div className="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
-                    <span className="text-xs text-gray-700">PRICE rule</span>
+                    <span className="text-xs text-gray-700">PRICE</span>
                   </div>
                 </div>
               </div>
@@ -131,10 +131,10 @@ export default function AdminDashboardPage() {
             <div className="relative flex h-full flex-col overflow-hidden rounded-lg max-lg:rounded-b-2xl lg:rounded-r-2xl">
               <div className="px-8 pt-5 pb-3 sm:px-10 sm:pb-0">
                 <p className="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">
-                  Shopping Carts
+                  Orders
                 </p>
                 <p className="mt-2 max-w-lg text-sm text-gray-600 max-lg:text-center">
-                  Monitor active and abandoned carts. Track customer purchases and behavior.
+                  Monitor orders. Track customer purchases and behavior.
                 </p>
               </div>
               <div className="relative min-h-64 w-full grow">
@@ -142,9 +142,9 @@ export default function AdminDashboardPage() {
                   <div className="flex bg-gray-800/40 ring-1 ring-white/5">
                     <div className="-mb-px flex text-sm font-medium text-gray-400">
                       <div className="border-r border-b border-r-white/10 border-b-white/20 bg-white/5 px-4 py-2 text-white">
-                        Active Carts
+                        Active Orders
                       </div>
-                      <div className="border-r border-gray-600/10 px-4 py-2">Abandoned</div>
+                      <div className="border-r border-gray-600/10 px-4 py-2">Cancelled Orders</div>
                     </div>
                   </div>
                   <div className="px-6 pt-6 pb-14 text-white">
