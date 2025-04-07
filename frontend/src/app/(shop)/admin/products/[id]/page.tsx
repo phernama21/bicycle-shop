@@ -259,7 +259,7 @@ const ProductDetails = () => {
                 {(previewUrl || product.image_url) ? (
                   <div className="relative w-full h-full">
                     <img 
-                      src={previewUrl ? `${previewUrl}` : `http://localhost:3000${product.image_url}`} 
+                      src={previewUrl ? `${previewUrl}` : `${process.env.NEXT_PUBLIC_API_HOST}${product.image_url}`} 
                       alt="Product preview" 
                       className="w-full h-full object-cover rounded-lg"
                     />

@@ -31,7 +31,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
                         >
                             <div className="relative aspect-square w-full overflow-hidden bg-gray-100">
                                 <img
-                                    src={`http://localhost:3000${product.image_url}`}
+                                    src={`${process.env.NEXT_PUBLIC_API_HOST}${product.image_url}`}
                                     alt={product.name}
                                     className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                                 />
