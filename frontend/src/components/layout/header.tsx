@@ -1,23 +1,27 @@
 'use client'
-
-import { AdminToggle } from '@/components/navigation/adminToggle';
+import { AdminToggle } from '@/components/navigation/adminToggle'; 
 import { useUser } from '@/contexts/UserContext';
 
-export const Header = () => {
+export const Header = () => { 
   const { user, logout } = useUser();
   
   return (
-    user ? <header className="bg-white border-b border-gray-200 shadow">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-3 items-center h-16">
-          <div className="col-span-1"></div>
-
-          <div className="col-span-1 flex justify-center">
-            <AdminToggle />
-          </div>
-          
-          <div className="col-span-1 flex justify-end items-center">
-            <span className="mr-4">
+    user ? (
+      <header className="bg-white border-b border-gray-200 shadow">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-3 items-center h-16">
+            <div className="col-span-1 flex md:justify-start justify-start">
+              <div className="md:hidden block">
+                <AdminToggle />
+              </div>
+            </div>
+            
+            <div className="col-span-1 hidden md:flex justify-center">
+              <AdminToggle />
+            </div>
+            
+            <div className="sm:col-span-2 md:col-span-1 flex justify-end items-center">
+            <span className="hidden sm:inline mr-4">
               Welcome, {user.firstName} {user.lastName}
             </span>
             <button
@@ -27,8 +31,11 @@ export const Header = () => {
               Sign out
             </button>
           </div>
+          </div>
         </div>
-      </div>
-    </header> : <></>
+      </header>
+    ) : (
+      <></>
+    )
   );
 };

@@ -190,8 +190,8 @@ const ProductDetails = () => {
   if (!product && !isLoading) return <div className="p-4">Product not found</div>;
 
   return (
-    <div className="container mx-auto p-4 py-8">
-      <div className="flex flex-col pt-5 rounded-lg sm:flex-row sm:items-center justify-between gap-4 mb-2">
+    <div className="container mx-auto px-4">
+      <div className="flex flex-col py-4 rounded-lg sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center">
           <button 
             onClick={handleBackClick}

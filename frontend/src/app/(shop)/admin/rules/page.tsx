@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import RuleDetailsModal from '@/components/rules/ruleDetailsModal';
 import { useAlert } from '@/contexts/AlertContext';
 import { useLoading } from '@/contexts/LoadingContext';
+import Pagination from '@/components/ui/pagination';
 
 export default function RulesPage() {
   const [rules, setRules] = useState<Rule[]>([]);
@@ -28,6 +29,9 @@ export default function RulesPage() {
   const [currentRule, setCurrentRule] = useState<Rule | null>(null);
   const { showAlert } = useAlert();
   const router = useRouter();
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,6 +92,15 @@ export default function RulesPage() {
       if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
       return 0;
     });
+  };
+
+  const indexOfLastRule = currentPage * itemsPerPage;
+  const indexOfFirstRule = indexOfLastRule - itemsPerPage;
+  const currentRules = sortedRules().slice(indexOfFirstRule, indexOfLastRule);
+  const totalPages = Math.ceil(sortedRules().length / itemsPerPage);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
   };
 
   const handleCreateRule = () => {
@@ -167,8 +180,8 @@ export default function RulesPage() {
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
+    <div className="container mx-auto px-4">
+      <div className="flex justify-between items-center py-4">
         <div className='flex flex-row'>
         <button 
             onClick={handleBackClick}
@@ -282,7 +295,7 @@ export default function RulesPage() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {sortedRules().map((rule) => (
+            {currentRules.map((rule) => (
               <tr key={rule.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {getProductName(rule)}
@@ -341,6 +354,18 @@ export default function RulesPage() {
           </tbody>
         </table>
       </div>
+
+      {rules.length > 0 && (
+        <div className="mt-4">
+          <Pagination 
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={rules.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
 
       <RuleDetailsModal
         isOpen={isModalOpen}

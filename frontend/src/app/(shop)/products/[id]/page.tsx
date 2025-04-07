@@ -230,8 +230,8 @@ export default function ProductCustomizer() {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <div className="flex items-center mb-4">
+      <div className="max-w-7xl mx-auto px-4 pt-2 sm:px-6 lg:px-8">
+        <div className="flex items-center py-4">
           <button 
             onClick={handleBackClick}
             className="mr-3 p-1 rounded-full hover:bg-gray-100 transition-colors"
@@ -257,6 +257,14 @@ export default function ProductCustomizer() {
             <p className="text-gray-600">{product.description}</p>
           </div>
           
+        </div>
+        <div className="relative mb-6">
+          <div className="absolute inset-0 flex items-center" aria-hidden="true">
+            <div className="w-full border-t border-indigo-600"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-gray-50 px-2 text-sm text-indigo-600">Customize your product</span>
+          </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

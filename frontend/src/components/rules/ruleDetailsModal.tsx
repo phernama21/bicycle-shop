@@ -270,7 +270,18 @@ export default function RuleDetailsModal({
               step="0.01"
               className="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
               value={priceAdjustment}
-              onChange={(e) => setPriceAdjustment(parseFloat(e.target.value) || 0)}
+              onFocus={(e) => {
+                if (priceAdjustment === 0) {
+                  e.target.value = '';
+                }
+              }}
+              onChange={(e) => {
+                if (e.target.value === '' || e.target.value === '-') {
+                  setPriceAdjustment(0);
+                } else {
+                  setPriceAdjustment(parseFloat(e.target.value) || 0);
+                }
+              }}
               disabled={!selectedProductId}
             />
           </div>

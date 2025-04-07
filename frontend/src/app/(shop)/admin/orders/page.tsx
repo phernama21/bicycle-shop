@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ArrowUp, ArrowDown } from 'lucide-react';
+import { ArrowUp, ArrowDown, ChevronLeft } from 'lucide-react';
 import { Order } from '@/models/order/domain/order';
 import { orderRepository } from '@/models/order/infrastructure/orderRepository';
 import { useAlert } from '@/contexts/AlertContext';
@@ -132,28 +132,15 @@ export default function OrdersPage() {
   const totalPages = Math.ceil(sortedOrders().length / itemsPerPage);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <div className='flex flex-row'>
+    <div className="container mx-auto px-4">
+      <div className="flex justify-between items-center py-4">
+        <div className='flex flex-row items-center'>
           <button 
             onClick={handleBackClick}
-            className="mr-3 p-1 rounded-full hover:bg-gray-100 transition-colors"
+            className="mr-3 h-full rounded-full hover:bg-gray-100 transition-colors"
             aria-label="Go back to dashboard"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-indigo-600"
-            >
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
+            <ChevronLeft className='text-indigo-600 mt-1' />
           </button>
           <h1 className="text-2xl font-bold text-indigo-600">Orders</h1>
         </div>

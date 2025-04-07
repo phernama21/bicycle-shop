@@ -82,8 +82,8 @@ export default function UsersListPage() {
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col bg-white py-5 rounded-lg shadow sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div className="container mx-auto px-4">
+      <div className="flex flex-col py-4 rounded-lg sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center">
           <button 
             onClick={handleBackClick}

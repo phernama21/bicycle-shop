@@ -17,10 +17,22 @@ export default function ProductGrid({ products }: ProductGridProps) {
 
     return (
         <div className="bg-gray-50 h-full">
-            <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-                <div className="flex justify-between items-center mb-8">
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-900">Our Products</h2>
+            <div className="mx-auto max-w-2xl px-8 sm:px-6 py-2 lg:max-w-7xl lg:px-8">
+                <div className="flex justify-between items-center py-4">
+                    <div className='flex flex-row'>
+                        <h1 className="text-2xl font-bold text-indigo-600">Our Products</h1>
+                    </div>
+                    </div>
+                    
+                    <div className="relative mb-6">
+                    <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div className="w-full border-t border-indigo-600"></div>
+                    </div>
+                    <div className="relative flex justify-center">
+                        <span className="bg-gray-50 px-2 text-sm text-indigo-600">Pick a product to customize</span>
+                    </div>
                 </div>
+
 
                 <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                     {products.map((product) => (

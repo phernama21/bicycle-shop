@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import SearchBar from "@/components/ui/searchBar";
 import Pagination from "@/components/ui/pagination";
-import { Plus, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 import { useLoading } from "@/contexts/LoadingContext";
 
 export default function ProductsListPage() {
@@ -98,28 +98,15 @@ export default function ProductsListPage() {
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col bg-white py-5 rounded-lg shadow sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div className="container mx-auto px-4">
+      <div className="flex flex-col py-4 rounded-lg sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center">
-          <button 
+        <button 
             onClick={handleBackClick}
-            className="mr-3 p-1 rounded-full hover:bg-gray-100 transition-colors"
+            className="mr-3 h-full rounded-full hover:bg-gray-100 transition-colors"
             aria-label="Go back to dashboard"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-indigo-600"
-            >
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
+            <ChevronLeft className='text-indigo-600 mt-1' />
           </button>
           <h1 className="text-2xl font-bold text-indigo-600">Products</h1>
         </div>
@@ -169,20 +156,7 @@ export default function ProductsListPage() {
               </div>
             </div>
             <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-indigo-600"
-              >
-                <path d="M9 18l6-6-6-6" />
-              </svg>
+              <ChevronRight className='text-indigo-600 mt-1' />
             </div>
           </li>
         ))}
