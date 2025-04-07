@@ -108,7 +108,7 @@ export default function UsersListPage() {
           <h1 className="text-2xl font-bold text-indigo-600">Users</h1>
         </div>
         
-        <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+        <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} placeholder="Search users..." />
       </div>
       
       <div className="relative mb-6">

@@ -159,7 +159,8 @@ export default function OrdersPage() {
         </div>
         <SearchBar 
           searchTerm={searchTerm} 
-          onSearchChange={handleSearchChange} 
+          onSearchChange={handleSearchChange}
+          placeholder='Search orders...'
         />
       </div>
       

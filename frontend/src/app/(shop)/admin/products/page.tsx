@@ -124,7 +124,7 @@ export default function ProductsListPage() {
           <h1 className="text-2xl font-bold text-indigo-600">Products</h1>
         </div>
         
-        <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+        <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} placeholder="Search products..." />
 
         <button 
           onClick={handleCreateProduct} 

@@ -4,10 +4,11 @@ import { ChangeEvent } from "react";
 
 interface SearchBarProps {
   searchTerm: string;
+  placeholder: string;
   onSearchChange: (value: string) => void;
 }
 
-export default function SearchBar({ searchTerm, onSearchChange }: SearchBarProps) {
+export default function SearchBar({ searchTerm, onSearchChange, placeholder }: SearchBarProps) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onSearchChange(e.target.value);
   };
@@ -36,7 +37,7 @@ export default function SearchBar({ searchTerm, onSearchChange }: SearchBarProps
       <input
         type="text"
         className="block w-full rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm placeholder-gray-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-        placeholder="Search users..."
+        placeholder={placeholder}
         value={searchTerm}
         onChange={handleChange}
       />
