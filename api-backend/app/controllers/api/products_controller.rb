@@ -1,6 +1,7 @@
 class Api::ProductsController < ApiController
   before_action :authenticate_api_user!
   before_action :set_product, only: [:load_base_product]
+  before_action :admin_check, only: [:update, :create]
   
   def load
     render json: Product.all.map{|p| product_with_image_url(p)}
@@ -69,5 +70,11 @@ class Api::ProductsController < ApiController
         ]
       ]
     )
+  end
+
+  def admin_check
+    unless current_api_user.is_admin?
+        render json: { error: 'Unauthorized' }, status: 401
+    end
   end
 end

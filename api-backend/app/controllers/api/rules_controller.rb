@@ -1,5 +1,6 @@
 class Api::RulesController < ApiController
     before_action :authenticate_api_user!
+    before_action :admin_check, except: [:load]
 
     def load
         render json: {rules: Rule.all.map{|r| r.front_data}}
@@ -48,6 +49,12 @@ class Api::RulesController < ApiController
             :effect_type,
             :price_adjustment
         )
+    end
+
+    def admin_check
+        unless current_api_user.is_admin?
+            render json: { error: 'Unauthorized' }, status: 401
+        end
     end
 
 end
