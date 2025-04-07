@@ -42,6 +42,8 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
           router.push('/products');
         }
         setTimeout(() => setIsNavigating(false), 500);
+      }else if(!pathname.includes('admin') && viewMode === 'admin'){
+        setViewMode('normal');
       }
     }
   }, [userLoading, isAuthenticated, pathname, viewMode]);
@@ -62,7 +64,6 @@ export const NavigationProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const navigateToDashboard = () => {
-    console.log("viwemode", viewMode)
     if (viewMode === 'admin') {
       router.push('/admin/dashboard');
     } else {
