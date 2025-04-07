@@ -13,6 +13,7 @@ import { productRepository } from '@/models/product/infrastructure/productReposi
 import { useRouter } from 'next/navigation';
 import RuleDetailsModal from '@/components/rules/ruleDetailsModal';
 import { useAlert } from '@/contexts/AlertContext';
+import { useLoading } from '@/contexts/LoadingContext';
 
 export default function RulesPage() {
   const [rules, setRules] = useState<Rule[]>([]);
@@ -20,7 +21,7 @@ export default function RulesPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { startLoading, stopLoading, isLoading} = useLoading();
   const [error, setError] = useState('');
   const [sortField, setSortField] = useState<keyof Rule | ''>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -31,7 +32,7 @@ export default function RulesPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
+        startLoading();
         const allRules = await ruleRepository.getAllRules();
         const allComponents = await componentRepository.getAllComponents();
         const allProducts = await productRepository.getAllProducts();
@@ -41,7 +42,7 @@ export default function RulesPage() {
       } catch (err) {
         showAlert('error', 'Load Error', 'Failed to load rules data.');
       } finally {
-        setLoading(false);
+        stopLoading()
       }
     };
 
@@ -163,7 +164,6 @@ export default function RulesPage() {
     return rule.product?.name || 'All Products';
   };
 
-  if (loading) return <div className="flex justify-center items-center h-64">Loading...</div>;
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
@@ -331,7 +331,7 @@ export default function RulesPage() {
                 </td>
               </tr>
             ))}
-            {rules.length === 0 && (
+            {rules.length === 0 && !isLoading && (
               <tr>
                 <td colSpan={8} className="px-6 py-4 text-center text-sm text-gray-500">
                   No rules found. Create a new rule to get started.

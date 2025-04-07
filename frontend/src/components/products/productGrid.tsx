@@ -16,7 +16,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
     const getRandomRating = () => (Math.random() * 2 + 3).toFixed(1);
 
     return (
-        <div className="bg-gray-50">
+        <div className="bg-gray-50 h-full">
             <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
                 <div className="flex justify-between items-center mb-8">
                     <h2 className="text-3xl font-bold tracking-tight text-gray-900">Our Products</h2>

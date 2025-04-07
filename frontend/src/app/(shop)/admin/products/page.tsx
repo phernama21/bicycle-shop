@@ -7,11 +7,12 @@ import { useRouter } from "next/navigation";
 import SearchBar from "@/components/ui/searchBar";
 import Pagination from "@/components/ui/pagination";
 import { Plus, X } from "lucide-react";
+import { useLoading } from "@/contexts/LoadingContext";
 
 export default function ProductsListPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { startLoading, stopLoading, isLoading } = useLoading();
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
   
@@ -25,15 +26,14 @@ export default function ProductsListPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true);
-        
+        startLoading()
         const allProducts = await productRepository.getAllProducts();
         setProducts(allProducts);
         setFilteredProducts(allProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
-        setIsLoading(false);
+        stopLoading()
       }
     };
 
@@ -96,14 +96,6 @@ export default function ProductsListPage() {
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <p className="text-gray-500">Loading products...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -196,7 +188,7 @@ export default function ProductsListPage() {
         ))}
       </ul>
       
-      {filteredProducts.length === 0 && (
+      {filteredProducts.length === 0 && !isLoading && (
         <div className="text-center py-8">
           <p className="text-gray-500">No products found</p>
         </div>

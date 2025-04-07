@@ -7,23 +7,22 @@ import { useRouter } from "next/navigation";
 import SearchBar from "@/components/ui/searchBar";
 import Switch from "@/components/ui/switch";
 import Pagination from "@/components/ui/pagination";
+import { useLoading } from "@/contexts/LoadingContext";
 
 export default function UsersListPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { startLoading, stopLoading, isLoading} = useLoading();
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
-  
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 5;
   
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true);
+        startLoading();
         const currentUserData = await userRepository.getCurrentUser();
         setCurrentUser(currentUserData);
         
@@ -33,7 +32,7 @@ export default function UsersListPage() {
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {
-        setIsLoading(false);
+        stopLoading();
       }
     };
 
@@ -81,14 +80,6 @@ export default function UsersListPage() {
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <p className="text-gray-500">Loading users...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -159,7 +150,7 @@ export default function UsersListPage() {
         ))}
       </ul>
       
-      {filteredUsers.length === 0 && (
+      {filteredUsers.length === 0 && !isLoading && (
         <div className="text-center py-8">
           <p className="text-gray-500">No users found</p>
         </div>

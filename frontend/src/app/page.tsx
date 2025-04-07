@@ -2,19 +2,24 @@
 
 import { useUser } from '@/contexts/UserContext';
 import { useNavigation } from '@/contexts/NavigationContext';
+import { useLoading } from '@/contexts/LoadingContext';
+import { useEffect } from 'react';
 import Link from 'next/link';
 
 export default function HomePage() {
-  const { isAuthenticated, loading } = useUser();
+  const { isAuthenticated, loading: userLoading } = useUser();
   const { isNavigating } = useNavigation();
+  const { startLoading, stopLoading } = useLoading();
+  
+  useEffect(() => {
+    if (userLoading || (isAuthenticated && isNavigating)) {
+      startLoading();
+    } else {
+      stopLoading();
+    }
+  }, [userLoading, isAuthenticated, isNavigating, startLoading, stopLoading]);
 
-  // Show loading while either user context is loading or we're navigating
-  if (loading || (isAuthenticated && isNavigating)) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
-  }
-
-  // Only show the home page content if the user is not authenticated
-  if (isAuthenticated) {
+  if (isAuthenticated && !isNavigating) {
     return <div className="flex items-center justify-center min-h-screen">Redirecting...</div>;
   }
 

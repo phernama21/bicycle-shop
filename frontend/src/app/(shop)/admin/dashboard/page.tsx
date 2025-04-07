@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 
 export default function AdminDashboardPage() {
-  const { user, loading, logout, isAuthenticated } = useUser();
+  const { user, loading, isAuthenticated } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function AdminDashboardPage() {
   }, [loading, isAuthenticated, router]);
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return null;
   }
 
   if (!user) {

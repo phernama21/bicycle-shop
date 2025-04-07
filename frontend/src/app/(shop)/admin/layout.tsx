@@ -20,7 +20,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   }, [user, loading, router]);
   
   if (loading || !user) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return null;
   }
   
   return user.isAdmin ? <div className="bg-gray-50 py-5 h-full">

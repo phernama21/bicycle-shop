@@ -1,6 +1,7 @@
 'use client'
 
 import { useCart } from '@/contexts/CartContext';
+import { useLoading } from '@/contexts/LoadingContext';
 import { CartItem, CartItemOption } from '@/models/cart/domain/cart';
 import { Product } from '@/models/product/domain/product';
 import { productRepository } from '@/models/product/infrastructure/productRepository';
@@ -13,7 +14,7 @@ export default function ProductCustomizer() {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [rules, setRules] = useState<Rule[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { startLoading, stopLoading, isLoading} = useLoading();
   const [selections, setSelections] = useState<Record<number, number>>({});
   const [validOptions, setValidOptions] = useState<Record<number, number[]>>({});
   const [totalPrice, setTotalPrice] = useState(0);
@@ -24,7 +25,7 @@ export default function ProductCustomizer() {
   useEffect(() => {
     const fetchData = async () => {
       const productId = Number(id)
-      setLoading(true);
+      startLoading();
       const prod = await productRepository.getProduct(productId);
       const allRules = await ruleRepository.getAllRules();
       setProduct(prod);
@@ -43,7 +44,7 @@ export default function ProductCustomizer() {
         setValidOptions(initialValidOptions);
       }
       
-      setLoading(false);
+      stopLoading()
     };
     
     fetchData();
@@ -225,12 +226,12 @@ export default function ProductCustomizer() {
     setTotalPrice(0);
   };
   
-  if (loading || !product) return <div className="p-4">Loading...</div>;
+  if (isLoading || !product) return <></>;
   
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-      <div className="flex items-center mb-4">
+        <div className="flex items-center mb-4">
           <button 
             onClick={handleBackClick}
             className="mr-3 p-1 rounded-full hover:bg-gray-100 transition-colors"
@@ -251,8 +252,11 @@ export default function ProductCustomizer() {
               <path d="M15 18l-6-6 6-6" />
             </svg>
           </button>
-          <h1 className="text-2xl font-bold text-indigo-600">{product.name}</h1>
-          <p className="text-gray-600 mb-8">{product.description}</p>
+          <div className='flex flex-col'>
+            <h1 className="text-2xl font-bold text-indigo-600">{product.name}</h1>
+            <p className="text-gray-600">{product.description}</p>
+          </div>
+          
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

@@ -8,11 +8,12 @@ import { useAlert } from '@/contexts/AlertContext';
 import { useRouter } from 'next/navigation';
 import SearchBar from '@/components/ui/searchBar';
 import Pagination from '@/components/ui/pagination';
+import { useLoading } from '@/contexts/LoadingContext';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { startLoading, stopLoading, isLoading} = useLoading();
   const [sortField, setSortField] = useState<keyof Order | ''>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,14 +25,14 @@ export default function OrdersPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
+        startLoading()
         const allOrders = await orderRepository.getAllOrders();
         setOrders(allOrders);
         setFilteredOrders(allOrders);
       } catch (err) {
         showAlert('error', 'Load Error', 'Failed to load orders data.');
       } finally {
-        setLoading(false);
+        stopLoading()
       }
     };
 
@@ -129,8 +130,6 @@ export default function OrdersPage() {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentOrders = sortedOrders().slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(sortedOrders().length / itemsPerPage);
-
-  if (loading) return <div className="flex justify-center items-center h-64">Loading...</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -258,7 +257,7 @@ export default function OrdersPage() {
                 </td>
               </tr>
             ))}
-            {filteredOrders.length === 0 && (
+            {filteredOrders.length === 0 && !isLoading && (
               <tr>
                 <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">
                   No orders found.
