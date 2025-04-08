@@ -19,7 +19,7 @@ The system should also be scalable to accommodate future product beyond bicycles
 - Tailwind CSS
 
 
-- Docker for containerization
+*Docker for containerization*
 
 > **Ruby:** 3.2
 > **Rails:** 8.0.2
@@ -248,7 +248,7 @@ Rules are fetched alongside the product in the initial useEffect. Then, every ti
 
 The total price is computed based on the selection while checking if there is a price adjustment for each selected option.
 
-All that logic is displayed to the client through the UI;
+All that logic is displayed to the client through the UI:
 1) Disabled options appear grayed out
 2) Price adjustments appear in green to highlight the change (the previous price appears crossed out)
 
@@ -266,6 +266,7 @@ Another important feature is the shopping cart. Upon completing product customiz
 A floating cart icon remains visible in the bottom-right corner across all application screens, displaying the current item count. Clicking this icon reopens the cart panel from any location within the application.
 
 **Checkout Process:**
+
 When ready to complete their purchase, users can click the "Checkout" button in the cart panel. This action:
 
 - Creates a new order record in the system
@@ -276,6 +277,24 @@ When ready to complete their purchase, users can click the "Checkout" button in 
 > The system maintains cart state between sessions, allowing users to return and complete their purchase later.
 
 ## 💡 Future Implementations
+
+The following features and enhancements are planned for future development cycles to improve the application's functionality, user experience, and maintainability:
+
+### Technical Improvements
+
+- **Implement Serializers:** Introduce consistent data serialization layer to standardize API responses and improve frontend/backend communication.
+- **Icon System Standardization:** Replace mixed SVG implementations with a unified icon system to ensure visual consistency throughout the application.
+
+### User Experience Enhancements
+
+- **Cart Item Editing:** Enable users to modify configured products directly from the cart, rather than only allowing removal and re-addition.
+
+- **Favorites & Rating System:** Implement functionality for users to save favorite configurations and provide product ratings/reviews.
+
+### Administrative Capabilities
+
+- **Enhanced Order Management:** Add administrative interfaces for customer service representatives to modify carts and orders on behalf of users.
+- **User Profile Management:** Develop comprehensive user details pages allowing admins to manage see users information, preferences, and order history.
 
 ## 📚 7. Additional Libraries and Gems
 ### Backend
@@ -288,6 +307,14 @@ When ready to complete their purchase, users can click the "Checkout" button in 
 > I decided to use Tailwid over Bootstrap even when I never used it before because of the templates and ui-kits provided. 
 
 ## 🔄 8. Git Management
+Despite being the sole contributor to this project, I maintained professional Git practices by implementing a structured branching strategy. Each significant feature or component was developed in its own dedicated branch, ensuring:
+
+- **Code Isolation:** Features were developed independently to prevent conflicts
+- **Atomic Commits:** Changes were organized into logical, focused commits
+- **Clean History:** The main-shop branch was kept stable with only complete, tested features
+- **Traceable Development:** Each feature's evolution can be clearly followed through its branch history
+
+While traditional pull requests and issue tracking were not utilized due to the single-contributor nature of the project, this branch-based approach maintained code quality and established good habits for future collaborative development.
 
 ## 🚀 9. Quick Start
 
