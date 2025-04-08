@@ -7,17 +7,17 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 
 export default function HomePage() {
-  const { isAuthenticated, loading: userLoading } = useUser();
+  const { isAuthenticated, loading } = useUser();
   const { isNavigating } = useNavigation();
   const { startLoading, stopLoading } = useLoading();
   
-  useEffect(() => {
-    if (userLoading || (isAuthenticated && isNavigating)) {
-      startLoading();
-    } else {
-      stopLoading();
-    }
-  }, [userLoading, isAuthenticated, isNavigating, startLoading, stopLoading]);
+  if (loading || (isAuthenticated && isNavigating)) {
+    return <div className="fixed inset-0 flex items-center justify-center bg-opacity-80 z-50">
+              <div className="p-4">
+                  <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+          </div>
+  }
 
   if (isAuthenticated && !isNavigating) {
     return <div className="flex items-center justify-center min-h-screen">Redirecting...</div>;
