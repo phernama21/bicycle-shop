@@ -19,6 +19,7 @@ The system should also be scalable to accommodate future product beyond bicycles
 - Tailwind CSS
 
 
+
 *Docker for containerization*
 
 > **Ruby:** 3.2
@@ -121,8 +122,8 @@ classDiagram
 
     Product "1" --> "*" Component : has
     Component "1" --> "*" Option : has
-    Rule "0,1" --> "1" Option : affects
-    Option "1" --> "0,1" Rule : defines
+    Rule "0 ... *" --> "1" Option : affects
+    Option "1" --> "0 ... *" Rule : defines
     User "1" --> "*" Cart : owns
     Cart "1" --> "*" CartItem : contains
     CartItem "1" --> "*" CartItemOption : includes
