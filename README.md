@@ -1,12 +1,13 @@
 # Tech Challenge - Bicycle Shop
 
 ## 📋 1. Introduction
-On this technical test the challenge was to build a website that allows a bicycle shop owner to sell his bicycles online.
+On this technical test the challenge was to build a website that allows a bicycle shop owner to sell his products online.
 
 The platform must manage various bicycle components with conditional dependencies between parts, track inventory status, and calculate dynamic pricing where certain combinations affect the final cost.
 
 The system should also be scalable to accommodate future product beyond bicycles.
 ## 🛠️ 2. Tech Stack
+
 ### Backend
 - Ruby on Rails
 - MySQL
@@ -16,6 +17,7 @@ The system should also be scalable to accommodate future product beyond bicycles
 - React / Next.js
 - Typescript
 - Tailwind CSS
+
 
 - Docker for containerization
 
@@ -119,8 +121,8 @@ classDiagram
 
     Product "1" --> "*" Component : has
     Component "1" --> "*" Option : has
-    Rule "1" --> "1" Option : affects
-    Option "1" --> "1" Rule : defines
+    Rule "0,1" --> "1" Option : affects
+    Option "1" --> "0,1" Rule : defines
     User "1" --> "*" Cart : owns
     Cart "1" --> "*" CartItem : contains
     CartItem "1" --> "*" CartItemOption : includes
@@ -130,13 +132,14 @@ classDiagram
     Product "1" --> "*" CartItem : added_to
 
 ```
-###Main models:
+
+### Main models:
 - `users`: normal users(clients) and admin users
 - `products`: bicycles, skis, surfboards ...
 - `components`: the different parts of products: wheels, frame, color ...
 - `options`: component possible choices
 - `rules`: defines the behaviour between options of the same product. For example, if a option A of component X is picked by the user, then the option B of component Y is unavailable
-- `carts`: shopping cart container the products customized by the users
+- `carts`: shopping cart containing the products customized by the users
 - `orders`: orders placed by the users
 
 
@@ -172,7 +175,7 @@ On the frontend I tried to maintain the cleanest structure possible while achiev
 frontend/
 ├── public/
 ├── src/
-│   ├── app/                        //pages
+│   ├── app/
 │   │   ├── (auth)/                 // auth pages (sign in, register...)
 │   │   └── (shop)/
 |   │       ├── (admin)/            //admin pages
@@ -220,12 +223,57 @@ Admin Users can (in addition to the user actions):
 
 ## ⚙️ 6. Code Key Logic
 ### Create, edit and delete Products, Components and Options
+The users can create a new Product by giving its new name. Then, it gets redirected to the product details page, where can eddit the name, description and add an image. On the same page, the user can also create, edit or delete new components, and the same applies for options.
 
+As it follows a clear nested structure (Products --> Components --> Options) I decided to use `accept_nested_attributes_for`, a Rails method that lets you update or create nested models in a single form submission, reducing controller complexity while mantaining a clean API.
 ### Rule verification (backend)
+A Rule is a key model for the workflow of this website. It links options of different component and change the normal behaviour between them. There is a conditional option that triggers the effect applied on the affected option. The effect can be `REQUIRE`, meaning that if a user picks an option A for a component X, then he must pick option B for component Y. Another effect is `EXCLUDE`,  meaning that if a user picks an option A for a component X, then option B of component Y is unavailable. Finally, there exists the effect type `CONDITIONAL PRICE`, meaning that if a user picks an option A for a component X, then the price of option B of component Y gets modified.
+
+This implementation can lead to conflicting rules if not handled carefully that is why I've implemented three validations:
+
+1) **No contradictory rules:** Checks if a rule with opposite effect_type but identical condition-effect relationships already exists
+
+2) **No Duplicate Conditional Prices:** Prevents conflicting price rules for the same component/option combinations
+
+3) **No Circular Dependencies:** Prevents two basic circular dependency types:
+-  Self-referential: A component/option that affects itself
+- Direct reciprocal: If A requires B, B cannot require A
+
+> The current validation only detects direct circular relationships (A→B→A) but not more complex chains like A→B→C→A.
 
 ### Rule application (frontend)
+The previous implementation works for creating and editing rules. But we also need to apply them when a user is picking the option for their customized products. 
+
+Rules are fetched alongside the product in the initial useEffect. Then, every time a selection changes it checks if the option condition matched for any rule. If the condition is met then it apply the corresponding effect.
+
+The total price is computed based on the selection while checking if there is a price adjustment for each selected option.
+
+All that logic is displayed to the client through the UI;
+1) Disabled options appear grayed out
+2) Price adjustments appear in green to highlight the change (the previous price appears crossed out)
 
 ### Cart workflow
+
+Another important feature is the shopping cart. Upon completing product customization and clicking "Add to Cart," a side panel slides in from the right displaying the current cart contents. Each cart item features:
+- Product thumbnail image
+- Product name and selected options summary
+- Individual and subtotal pricing
+- Quantity controls with increment/decrement buttons
+- Remove item option
+
+**Cart Persistence & Access:**
+
+A floating cart icon remains visible in the bottom-right corner across all application screens, displaying the current item count. Clicking this icon reopens the cart panel from any location within the application.
+
+**Checkout Process:**
+When ready to complete their purchase, users can click the "Checkout" button in the cart panel. This action:
+
+- Creates a new order record in the system
+- Transitions the cart status to "Ordered"
+- Displays an order confirmation
+- Empties the active cart
+
+> The system maintains cart state between sessions, allowing users to return and complete their purchase later.
 
 ## 💡 Future Implementations
 
@@ -237,7 +285,7 @@ Admin Users can (in addition to the user actions):
 ### Frontend
 - `tailwind` - For UI design
 - `lucide-react` - Purpose/functionality
-> I decided to use Tailwid over Bootstrap even when I never used it before because of the templates and ui-kits provided by it. 
+> I decided to use Tailwid over Bootstrap even when I never used it before because of the templates and ui-kits provided. 
 
 ## 🔄 8. Git Management
 
@@ -251,7 +299,7 @@ Admin Users can (in addition to the user actions):
 docker-compose up --build
 ```
 
-3. Access the web:
+3. Access to the web:
 
     http://localhost:3001
 
