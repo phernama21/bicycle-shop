@@ -1,11 +1,9 @@
 # Tech Challenge - Bicycle Shop
 
 ## 📋 1. Introduction
-On this technical test the challenge was to build a website that allows a bicycle shop owner to sell his products online.
 
-The platform must manage various bicycle components with conditional dependencies between parts, track inventory status, and calculate dynamic pricing where certain combinations affect the final cost.
+This technical assessment required the development of a comprehensive e-commerce platform for a bicycle shop owner seeking to expand their business online. The primary challenge involved creating a sophisticated product configuration system that could handle complex relationships between options while maintaining scalability for future growth.
 
-The system should also be scalable to accommodate future product beyond bicycles.
 ## 🛠️ 2. Tech Stack
 
 ### Backend
