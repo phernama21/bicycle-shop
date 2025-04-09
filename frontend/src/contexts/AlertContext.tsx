@@ -1,3 +1,5 @@
+'use client'
+
 import CustomAlert from '@/components/ui/alert';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 

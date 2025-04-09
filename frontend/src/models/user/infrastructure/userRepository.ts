@@ -51,7 +51,7 @@ export const userRepository = {
       return single(response.data.user);
     } catch (error) {
       console.error('Get current user error:', error);
-      return null;
+      throw error;
     }
   },
 

@@ -5,6 +5,7 @@ import { User, UserLogin, UserRegistration } from '@/models/user/domain/user';
 import { userRepository } from '@/models/user/infrastructure/userRepository';
 import { clearAuthHeaders } from '@/lib/api';
 import { useRouter } from 'next/navigation';
+import { useAlert } from '@/contexts/AlertContext';
 
 interface UserContextType {
   user: User | null;
@@ -23,14 +24,20 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { showAlert } = useAlert();
 
-  // Check if user is already authenticated
   useEffect(() => {
     const validateToken = async () => {
       try {
         const currentUser = await userRepository.getCurrentUser();
-        setUser(currentUser);
+        if (currentUser) {
+          setUser(currentUser);
+        } else {
+          clearAuthHeaders();
+          
+        }
       } catch (err: any) {
+        showAlert('error', 'Authentication error', 'You need to log in.');
         clearAuthHeaders();
       } finally {
         setLoading(false);
@@ -47,7 +54,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await userRepository.login(credentials);
       setUser(response.user);
-      // Navigation will be handled by NavigationContext
     } catch (err: any) {
       setError(err.response?.data?.errors?.[0] || 'Login failed');
       throw err;
@@ -63,7 +69,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await userRepository.register(userData);
       setUser(response.user);
-      // Navigation will be handled by NavigationContext
     } catch (err: any) {
       setError(err.response?.data?.errors?.[0] || 'Registration failed');
       throw err;

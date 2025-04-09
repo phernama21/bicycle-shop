@@ -1,24 +1,30 @@
 'use client'
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useUser } from '@/contexts/UserContext';
 import { Header } from '@/components/layout/header';
-import { AlertProvider } from '@/contexts/AlertContext';
+import { useRouter } from 'next/navigation';
 
 export default function ShopLayout({ children }: { children: ReactNode }) {
-  const { loading } = useUser();
+  const { user, loading } = useUser();
+    const router = useRouter();
+    
+    useEffect(() => {
+      if (!loading && !user) {
+        router.push('/login');
+      }
+    }, [user, loading, router]);
    
-  if (loading) {
+  if (loading || !user) {
     return <></>;
   }
   
   return (
-    <AlertProvider>
     <div className="flex flex-col h-full">
         <Header />
         <main className="flex-grow">
             {children}
         </main>
     </div>
-    </AlertProvider>);
+);
 }
