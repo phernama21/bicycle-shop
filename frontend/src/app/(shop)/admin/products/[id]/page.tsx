@@ -9,6 +9,7 @@ import { useAlert } from '@/contexts/AlertContext';
 import { Component } from '@/models/component/domain/component';
 import { Option } from '@/models/option/domain/option';
 import { useLoading } from '@/contexts/LoadingContext';
+import Modal from '@/components/ui/modal';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -19,6 +20,8 @@ const ProductDetails = () => {
   const { showAlert } = useAlert();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  // Add state for delete modal
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -173,6 +176,28 @@ const ProductDetails = () => {
     router.push("/admin/products");
   };
 
+  const handleDeleteClick = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeleteProduct = async () => {
+    if (!product) return;
+    setIsDeleteModalOpen(false);
+    try {
+      startLoading();
+      await productRepository.deleteProduct(product.id);
+      stopLoading();
+      showAlert('success', 'Success!', 'Product deleted successfully.');
+      router.push("/admin/products");
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      showAlert('error', 'Delete Failed', 'Failed to delete product. Please try again.');
+      stopLoading();
+    } finally {
+      
+    }
+  };
+
   const handleSubmit = async () => {
     if (!product) return;
     
@@ -229,7 +254,34 @@ const ProductDetails = () => {
       {product && 
       <>
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
+          <div className='flex flex-row justify-between'>
+            <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
+            <button
+              onClick={handleDeleteClick}
+              className="p-2 bg-red-700 text-white rounded hover:bg-red-700 transition-colors flex items-center"
+              aria-label="Delete Product"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="mr-1"
+              >
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                <line x1="10" y1="11" x2="10" y2="17" />
+                <line x1="14" y1="11" x2="14" y2="17" />
+              </svg>
+              
+            </button>
+          </div>
+          
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Name</label>
             <input
@@ -368,6 +420,29 @@ const ProductDetails = () => {
         </div>
       </>}
 
+      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Confirm Deletion">
+        <div className="space-y-4">
+          <p className="text-sm text-gray-500">
+            Are you sure you want to delete this product? This action cannot be undone.
+          </p>
+          <div className="mt-5 flex justify-end space-x-3">
+            <button
+              type="button"
+              className="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              onClick={() => setIsDeleteModalOpen(false)}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              onClick={confirmDeleteProduct}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

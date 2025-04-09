@@ -4,11 +4,11 @@ class Api::ProductsController < ApiController
   before_action :admin_check, only: [:update, :create]
   
   def load
-    render json: Product.all.map{|p| product_with_image_url(p)}
+    render json: Product.where(deleted: false).map{|p| product_with_image_url(p)}
   end
   
   def load_single
-    product = Product.find_by_id(params[:id])
+    product = Product.where(id: params[:id], deleted: false)&.first
     render json: product_with_image_url(product)
   end
   
@@ -28,6 +28,14 @@ class Api::ProductsController < ApiController
   def create
     product = Product.create!(name: params[:name])
     render json: {product: product_with_image_url(product)}
+  end
+
+  def delete
+    product = Product.where(id: params[:id], deleted: false)&.first
+    if product
+      product.update!(deleted: true)
+    end
+    head :no_content
   end
   
   private

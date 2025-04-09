@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get "products/:id" => "products#load_single"
     put "products/:id" => "products#update"
     post "products" => "products#create"
+    delete "products/:id" => "products#delete"
 
     #RULES
     get "rules" => "rules#load"

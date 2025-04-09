@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_06_183045) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_09_173940) do
   create_table "cart_item_options", force: :cascade do |t|
     t.integer "cart_item_id"
     t.integer "option_id"
@@ -98,6 +98,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_06_183045) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "image"
+    t.boolean "deleted", default: false
   end
 
   create_table "rules", force: :cascade do |t|

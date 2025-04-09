@@ -32,5 +32,14 @@ export const productRepository = {
   async createProduct(productName: string): Promise<Product> {
     const response = await apiClient.post("/products", {name: productName})
     return singleProduct(response.data.product)
+  },
+
+  async deleteProduct(productId: number): Promise<boolean> {
+    try{
+      const response = await apiClient.delete(`/products/${productId}`)
+      return response.status == 204
+    }catch(error){
+      throw error
+    }
   }
 };
