@@ -50,7 +50,6 @@ export const userRepository = {
       const response = await apiClient.get('/auth/me');
       return single(response.data.user);
     } catch (error) {
-      console.error('Get current user error:', error);
       throw error;
     }
   },

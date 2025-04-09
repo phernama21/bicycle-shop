@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { User, UserLogin, UserRegistration } from '@/models/user/domain/user';
 import { userRepository } from '@/models/user/infrastructure/userRepository';
 import { clearAuthHeaders } from '@/lib/api';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAlert } from '@/contexts/AlertContext';
 
 interface UserContextType {
@@ -24,6 +24,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const pathname = usePathname();
   const { showAlert } = useAlert();
 
   useEffect(() => {
@@ -37,7 +38,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           
         }
       } catch (err: any) {
-        showAlert('error', 'Authentication error', 'You need to log in.');
+        if(!['/', '/login', '/register'].includes(pathname)){
+          showAlert('error', 'Authentication error', 'You need to log in.');
+        }
         clearAuthHeaders();
       } finally {
         setLoading(false);

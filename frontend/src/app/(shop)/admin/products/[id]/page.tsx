@@ -43,6 +43,10 @@ const ProductDetails = () => {
       setProduct(data);
      
       stopLoading()
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     } catch (error) {
       showAlert('error', 'Load Error', 'Failed to load product data.');
       stopLoading();
@@ -206,6 +210,7 @@ const ProductDetails = () => {
       setIsDirty(false);
       showAlert('success', 'Success!', 'Product updated successfully.');
       loadProduct();
+      
     } catch (error) {
       console.error("Error updating product:", error);
       showAlert('error', 'Update Failed', 'Failed to update product. Please try again.');

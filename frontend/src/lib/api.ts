@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 
+const PERMITED_ROUTE = '/auth/me';
+
 const apiClient = axios.create({
   baseURL: API_URL,
   headers: {
@@ -51,7 +53,20 @@ apiClient.interceptors.response.use(
     
     return response;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    const shouldRedirect = 
+      error.response && 
+      (error.response.status === 401 || error.response.status === 403) && 
+      error.config && 
+      error.config.url != PERMITED_ROUTE
+    
+    if (shouldRedirect) {
+      clearAuthHeaders();
+      redirectToLogin();
+    }
+    
+    return Promise.reject(error);
+  }
 );
 
 export const getAuthHeaders = () => {
@@ -64,6 +79,12 @@ export const getAuthHeaders = () => {
 export const clearAuthHeaders = () => {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('authHeaders');
+  }
+};
+
+export const redirectToLogin = () => {
+  if (typeof window !== 'undefined') {
+    window.location.href = '/login';
   }
 };
 
