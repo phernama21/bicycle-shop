@@ -8,6 +8,7 @@ import SearchBar from "@/components/ui/searchBar";
 import Switch from "@/components/ui/switch";
 import Pagination from "@/components/ui/pagination";
 import { useLoading } from "@/contexts/LoadingContext";
+import { useAlert } from "@/contexts/AlertContext";
 
 export default function UsersListPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -18,6 +19,7 @@ export default function UsersListPage() {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 5;
+  const { showAlert } = useAlert();
   
   useEffect(() => {
     const fetchData = async () => {
@@ -52,23 +54,27 @@ export default function UsersListPage() {
       );
       setFilteredUsers(filtered);
     }
-    setCurrentPage(1); 
   }, [searchTerm, users]);
 
   const handleToggleAdmin = async (userId: number, newStatus: boolean) => {
     if (currentUser && userId === currentUser.id) {
       return;
     }
-    setUsers(users.map(user => 
+    
+    try {
+      startLoading()
+      const success = await userRepository.updateUserAdminStatus(userId, newStatus);
+      setUsers(users.map(user => 
         user.id === userId ? { ...user, isAdmin: newStatus } : user
       ));
-    try {
-      const success = await userRepository.updateUserAdminStatus(userId, newStatus);
+      showAlert('success', 'Success!', 'User privilege changed successfully.');
     } catch (error) {
-      console.error("Error updating user:", error);
       setUsers(users.map(user => 
         user.id === userId ? { ...user, isAdmin: !newStatus } : user
       ));
+      showAlert('error', 'Update Failed', 'Failed to change user privileges. Please try again.');
+    }finally{
+      stopLoading()
     }
   };
   
